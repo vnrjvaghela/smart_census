@@ -1,0 +1,176 @@
+﻿Launching lib\main.dart on Chrome in debug mode...
+Waiting for connection from debug service on Chrome...          
+flutter : lib/main.dart:52:20: Error: 
+The argument type 'CardTheme' can't be 
+assigned to the parameter type 
+'CardThemeData?'.
+At line:1 char:1
++ flutter run -d chrome > run_error.txt 
+2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~
+    + CategoryInfo          : NotSpecif 
+   ied: (lib/main.dart:5...ardThemeDat  
+  a?'.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCom 
+   mandError
+ 
+ - 'CardTheme' is from 'package:flutter/
+src/material/card_theme.dart' ('../../..
+/../flutter/packages/flutter/lib/src/mat
+erial/card_theme.dart').
+ - 'CardThemeData' is from 'package:flut
+ter/src/material/card_theme.dart' ('../.
+./../../flutter/packages/flutter/lib/src
+/material/card_theme.dart').
+        cardTheme: CardTheme(
+                   ^
+lib/screens/survey/step1_household.dart:
+148:42: Error: The getter 'GoogleFonts' 
+isn't defined for the type 
+'_Step1HouseholdState'.
+ - '_Step1HouseholdState' is from 'packa
+ge:smart_census/screens/survey/step1_hou
+sehold.dart' ('lib/screens/survey/step1_
+household.dart').
+Try correcting the name to the name of 
+an existing getter, or defining a 
+getter or field named 'GoogleFonts'.
+              Text("Step 1 of 4", 
+style: GoogleFonts.outfit(color: 
+Colors.grey)),
+                                        
+ ^^^^^^^^^^^
+lib/screens/survey/step1_household.dart:
+166:74: Error: The getter 'GoogleFonts' 
+isn't defined for the type 
+'_Step1HouseholdState'.
+ - '_Step1HouseholdState' is from 'packa
+ge:smart_census/screens/survey/step1_hou
+sehold.dart' ('lib/screens/survey/step1_
+household.dart').
+Try correcting the name to the name of 
+an existing getter, or defining a 
+getter or field named 'GoogleFonts'.
+                            
+Text("Household ID (Auto-generated)", 
+style: GoogleFonts.outfit(fontSize: 12, 
+color: Colors.grey.shade600, 
+fontWeight: FontWeight.w500)),
+                                        
+                                 
+^^^^^^^^^^^
+lib/screens/survey/step1_household.dart:
+168:55: Error: The getter 'GoogleFonts' 
+isn't defined for the type 
+'_Step1HouseholdState'.
+ - '_Step1HouseholdState' is from 'packa
+ge:smart_census/screens/survey/step1_hou
+sehold.dart' ('lib/screens/survey/step1_
+household.dart').
+Try correcting the name to the name of 
+an existing getter, or defining a 
+getter or field named 'GoogleFonts'.
+                            
+Text(_householdId, style: 
+GoogleFonts.outfit(fontSize: 18, 
+fontWeight: FontWeight.bold, color: 
+const Color(0xFF1E293B))),
+                                        
+              ^^^^^^^^^^^
+lib/screens/survey/step1_household.dart:
+182:24: Error: The getter 'GoogleFonts' 
+isn't defined for the type 
+'_Step1HouseholdState'.
+ - '_Step1HouseholdState' is from 'packa
+ge:smart_census/screens/survey/step1_hou
+sehold.dart' ('lib/screens/survey/step1_
+household.dart').
+Try correcting the name to the name of 
+an existing getter, or defining a 
+getter or field named 'GoogleFonts'.
+                style: 
+GoogleFonts.outfit(fontSize: 16),
+                       ^^^^^^^^^^^
+lib/screens/survey/step1_household.dart:
+198:39: Error: The getter 'GoogleFonts' 
+isn't defined for the type 
+'_Step1HouseholdState'.
+ - '_Step1HouseholdState' is from 'packa
+ge:smart_census/screens/survey/step1_hou
+sehold.dart' ('lib/screens/survey/step1_
+household.dart').
+Try correcting the name to the name of 
+an existing getter, or defining a 
+getter or field named 'GoogleFonts'.
+              Text("Location", style: 
+GoogleFonts.outfit(fontSize: 16, 
+fontWeight: FontWeight.bold, color: 
+const Color(0xFF1E293B))),
+                                      
+^^^^^^^^^^^
+lib/screens/survey/step1_household.dart:
+221:28: Error: The getter 'GoogleFonts' 
+isn't defined for the type 
+'_Step1HouseholdState'.
+ - '_Step1HouseholdState' is from 'packa
+ge:smart_census/screens/survey/step1_hou
+sehold.dart' ('lib/screens/survey/step1_
+household.dart').
+Try correcting the name to the name of 
+an existing getter, or defining a 
+getter or field named 'GoogleFonts'.
+                    style: 
+GoogleFonts.outfit(
+                           ^^^^^^^^^^^
+lib/screens/survey/step1_household.dart:
+227:82: Error: The getter 'GoogleFonts' 
+isn't defined for the type 
+'_Step1HouseholdState'.
+ - '_Step1HouseholdState' is from 'packa
+ge:smart_census/screens/survey/step1_hou
+sehold.dart' ('lib/screens/survey/step1_
+household.dart').
+Try correcting the name to the name of 
+an existing getter, or defining a 
+getter or field named 'GoogleFonts'.
+                  subtitle: 
+_gpsLocation != null ? Text("Accuracy: 
+High", style: 
+GoogleFonts.outfit(fontSize: 13, color: 
+Colors.grey.shade600)) : null,
+                                        
+                                        
+ ^^^^^^^^^^^
+lib/screens/survey/step3_documents.dart:
+37:53: Error: The getter 'documentUrls' 
+isn't defined for the type 
+'SurveyModel'.
+ - 'SurveyModel' is from 'package:smart_
+census/models/survey_model.dart' 
+('lib/models/survey_model.dart').
+Try correcting the name to the name of 
+an existing getter, or defining a 
+getter or field named 'documentUrls'.
+      _capturedImages.addAll(widget.exis
+tingSurvey!.documentUrls);
+                                        
+            ^^^^^^^^^^^^
+lib/screens/survey/step3_documents.dart:
+69:9: Error: No named parameter with 
+the name 'documentUrls'.
+        documentUrls: _capturedImages,
+        ^^^^^^^^^^^^
+lib/models/survey_model.dart:38:3: 
+Context: Found this candidate, but the 
+arguments don't match.
+  SurveyModel({
+  ^^^^^^^^^^^
+lib/screens/survey/step3_documents.dart:
+74:29: Error: Member not found: 
+'DatabaseService.saveSurvey'.
+      await 
+DatabaseService.saveSurvey(survey);
+                            ^^^^^^^^^^
+Waiting for connection from debug service on Chrome...             28.9s
+Failed to compile application.

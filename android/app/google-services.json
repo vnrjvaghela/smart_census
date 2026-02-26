@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "504537771120",
+    "project_id": "smart-census-559d6",
+    "storage_bucket": "smart-census-559d6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:504537771120:android:ab9153e44db1040e94d8b5",
+        "android_client_info": {
+          "package_name": "com.example.smart_census"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAas68aLXlRuTV8L4bvUH1-hwwNITA7w8M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,35 @@
+﻿Analyzing smart_census...                                       
+
+warning - Unused import: 'package:smart_census/services/database_service.dart' - lib\main.dart:5:8 - unused_import
+   info - Don't invoke 'print' in production code - lib\main.dart:12:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\main.dart:13:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\screens\auth\login_screen.dart:97:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\screens\auth\login_screen.dart:99:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\screens\auth\login_screen.dart:102:11 - avoid_print
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\auth\login_screen.dart:170:45 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\auth\login_screen.dart:229:67 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\screens\auth\login_screen.dart:263:67 - deprecated_member_use
+   info - The variable name 'jsonify_style_placeholder' isn't a lowerCamelCase identifier - lib\screens\auth\login_screen.dart:298:14 - non_constant_identifier_names
+   info - Missing type annotation - lib\screens\auth\splash_screen.dart:18:3 - strict_top_level_inference
+warning - Unused import: 'package:google_fonts/google_fonts.dart' - lib\screens\home\home_screen.dart:3:8 - unused_import
+warning - Unused import: 'package:smart_census/screens/auth/login_screen.dart' - lib\screens\home\home_screen.dart:4:8 - unused_import
+warning - Unused import: 'package:smart_census/services/auth_service.dart' - lib\screens\home\home_screen.dart:5:8 - unused_import
+   info - Don't invoke 'print' in production code - lib\screens\home\home_screen.dart:27:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\screens\home\home_screen.dart:32:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\screens\home\home_screen.dart:35:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\screens\home\home_screen.dart:37:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\screens\home\home_screen.dart:43:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\screens\home\home_screen.dart:76:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\screens\profile\profile_screen.dart:24:7 - avoid_print
+warning - Unused import: 'package:smart_census/models/user_model.dart' - lib\screens\survey\step1_household.dart:4:8 - unused_import
+   info - Don't invoke 'print' in production code - lib\services\auth_service.dart:45:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\database_service.dart:10:5 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\database_service.dart:13:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\database_service.dart:18:9 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\database_service.dart:22:10 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\database_service.dart:27:7 - avoid_print
+   info - Don't invoke 'print' in production code - lib\services\database_service.dart:29:7 - avoid_print
+warning - The value of the field '_storage' isn't used - lib\services\sync_service.dart:9:9 - unused_field
+   info - Don't invoke 'print' in production code - lib\services\sync_service.dart:23:9 - avoid_print
+warning - The declaration '_uploadImage' isn't referenced - lib\services\sync_service.dart:74:19 - unused_element
+
