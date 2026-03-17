@@ -29,13 +29,14 @@ class SurveyModelAdapter extends TypeAdapter<SurveyModel> {
       timestamp: fields[9] as DateTime,
       aiVerified: fields[10] as bool,
       blockchainHash: fields[11] as String,
+      documentUrls: (fields[12] as List).cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, SurveyModel obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -59,7 +60,9 @@ class SurveyModelAdapter extends TypeAdapter<SurveyModel> {
       ..writeByte(10)
       ..write(obj.aiVerified)
       ..writeByte(11)
-      ..write(obj.blockchainHash);
+      ..write(obj.blockchainHash)
+      ..writeByte(12)
+      ..write(obj.documentUrls);
   }
 
   @override

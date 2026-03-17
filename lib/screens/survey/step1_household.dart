@@ -5,6 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:smart_census/models/survey_model.dart';
 import 'package:smart_census/models/user_model.dart'; // Placeholder if needed used later
 import 'package:smart_census/screens/survey/step2_members.dart';
+import 'package:smart_census/services/database_service.dart';
 
 class Step1Household extends StatefulWidget {
   final SurveyModel? existingSurvey;
@@ -111,23 +112,76 @@ class _Step1HouseholdState extends State<Step1Household> {
         );
         return;
       }
+      _checkDuplicateAndProceed();
+    }
+  }
 
-      // Pass data to next step (or save draft)
-      // For now, simple navigation or placeholder
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Proceeding to Step 2...')),
+  Future<void> _checkDuplicateAndProceed() async {
+    // Check if this householdId already exists in local DB
+    final existing = DatabaseService().getAllSurveys();
+    final isDuplicate = existing.any(
+      (s) => s.householdId == _householdId && s.id != (widget.existingSurvey?.id ?? ''),
+    );
+
+    if (isDuplicate && mounted) {
+      final proceed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          title: Row(
+            children: [
+              const Icon(Icons.warning_amber_rounded, color: Colors.orange),
+              const SizedBox(width: 8),
+              Text('Duplicate Household', style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 17)),
+            ],
+          ),
+          content: Text(
+            'A survey for household ID "$_householdId" already exists.\nDo you want to create another survey for this household?',
+            style: GoogleFonts.inter(fontSize: 14),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+              child: const Text('Proceed Anyway'),
+            ),
+          ],
+        ),
       );
-      
-      Navigator.push(
-        context, 
-        MaterialPageRoute(builder: (_) => Step2Members(
-          householdId: _householdId, 
+      if (proceed != true) return;
+    }
+
+    if (!mounted) return;
+
+    // Auto-save draft
+    final latLng = _gpsLocation!.split(',');
+    final draft = SurveyModel(
+      id: widget.existingSurvey?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+      householdId: _householdId,
+      address: _addressController.text,
+      latitude: double.tryParse(latLng[0].trim()) ?? 0,
+      longitude: double.tryParse(latLng[1].trim()) ?? 0,
+      members: widget.existingSurvey?.members ?? [],
+      timestamp: widget.existingSurvey?.timestamp ?? DateTime.now(),
+      status: 'Draft',
+    );
+    await DatabaseService().saveDraft(draft);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => Step2Members(
+          householdId: _householdId,
           address: _addressController.text,
           gpsLocation: _gpsLocation!,
           existingSurvey: widget.existingSurvey,
-        ))
-      );
-    }
+        ),
+      ),
+    );
   }
 
   @override

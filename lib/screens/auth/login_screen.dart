@@ -26,18 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _sendOTP() async {
-    // Test Logic: Bypass Firebase for sample number
-    if (_phoneController.text.trim() == '9999999999') {
-      setState(() {
-        _loading = false;
-        _otpSent = true;
-        _verificationId = 'test_verification_id';
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Test Mode: Use OTP 123456')),
-      );
-      return;
-    }
+
 
     if (_phoneController.text.length < 10) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -92,27 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     setState(() => _loading = true);
 
-    // Test bypass check
-    if (_verificationId == 'test_verification_id') {
-      print("DEBUG: Test verification ID matched");
-      if (_otpController.text == '123456') {
-        print("DEBUG: OTP matched. Setting loading=false");
-        setState(() => _loading = false);
-        if (mounted) {
-          print("DEBUG: Navigating to HomeScreen");
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomeScreen()),
-          );
-        }
-      } else {
-        setState(() => _loading = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Invalid Test OTP')),
-        );
-      }
-      return;
-    }
+
 
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(

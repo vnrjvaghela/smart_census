@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_census/models/survey_model.dart';
 import 'package:smart_census/screens/survey/step1_household.dart';
 
@@ -9,11 +11,12 @@ class SurveyDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Survey: ${survey.householdId}'),
-        backgroundColor: Theme.of(context).primaryColor,
-        foregroundColor: Colors.white,
         actions: [
           if (!survey.isSynced)
             IconButton(
@@ -33,69 +36,75 @@ class SurveyDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Status Banner
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: survey.isSynced ? Colors.green.shade50 : Colors.orange.shade50,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: survey.isSynced ? Colors.green.shade200 : Colors.orange.shade200
+            // Status Row: Sync + AI Verified badges
+            Row(
+              children: [
+                // Sync Status Chip
+                _buildStatusChip(
+                  icon: survey.isSynced ? Icons.cloud_done_rounded : Icons.cloud_upload_outlined,
+                  label: survey.isSynced ? 'Synced' : 'Pending Upload',
+                  color: survey.isSynced ? Colors.green : Colors.orange,
+                  isDark: isDark,
                 ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    survey.isSynced ? Icons.check_circle : Icons.sync_problem,
-                    color: survey.isSynced ? Colors.green : Colors.orange
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    survey.isSynced ? 'Synced to Cloud' : 'Pending Upload',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: survey.isSynced ? Colors.green.shade800 : Colors.orange.shade800
-                    ),
-                  ),
-                ],
-              ),
+                const SizedBox(width: 8),
+                // AI Verified Chip
+                _buildStatusChip(
+                  icon: survey.aiVerified ? Icons.verified_rounded : Icons.shield_outlined,
+                  label: survey.aiVerified ? 'AI Verified' : 'Not Verified',
+                  color: survey.aiVerified ? Colors.blue : Colors.grey,
+                  isDark: isDark,
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
 
             // Household Info
-            const Text("Household Details", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            _buildSectionTitle('Household Details', theme),
             const SizedBox(height: 8),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    _buildInfoRow(Icons.home, "Address", survey.address),
-                    const Divider(),
-                    _buildInfoRow(Icons.location_on, "GPS", "${survey.latitude}, ${survey.longitude}"),
-                    const Divider(),
-                    _buildInfoRow(Icons.access_time, "Created", survey.timestamp.toString().split('.')[0]),
-                  ],
-                ),
+            _buildCard(
+              isDark: isDark,
+              child: Column(
+                children: [
+                  _buildInfoRow(Icons.home_outlined, 'Address', survey.address, isDark),
+                  _buildDivider(isDark),
+                  _buildInfoRow(Icons.location_on_outlined, 'GPS', '${survey.latitude}, ${survey.longitude}', isDark),
+                  _buildDivider(isDark),
+                  _buildInfoRow(Icons.access_time_rounded, 'Created', survey.timestamp.toString().split('.')[0], isDark),
+                  _buildDivider(isDark),
+                  _buildInfoRow(Icons.info_outline_rounded, 'Status', survey.status, isDark),
+                ],
               ),
             ),
             const SizedBox(height: 24),
 
             // Family Members
-            Text("Family Members (${survey.members.length})", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            _buildSectionTitle('Family Members (${survey.members.length})', theme),
             const SizedBox(height: 8),
-            Card(
+            _buildCard(
+              isDark: isDark,
               child: ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: survey.members.length,
-                separatorBuilder: (c, i) => const Divider(height: 1),
+                separatorBuilder: (c, i) => _buildDivider(isDark),
                 itemBuilder: (context, index) {
                   final member = survey.members[index];
                   return ListTile(
-                    leading: CircleAvatar(child: Text(member.name[0])),
-                    title: Text(member.name),
-                    subtitle: Text("${member.relation} • ${member.age} yrs • ${member.gender}"),
+                    leading: CircleAvatar(
+                      backgroundColor: theme.colorScheme.primary.withOpacity(0.15),
+                      child: Text(
+                        member.name.isNotEmpty ? member.name[0].toUpperCase() : '?',
+                        style: GoogleFonts.inter(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    title: Text(member.name, style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                    subtitle: Text(
+                      '${member.relation} • ${member.age} yrs • ${member.gender}',
+                      style: GoogleFonts.inter(fontSize: 13),
+                    ),
                   );
                 },
               ),
@@ -103,13 +112,21 @@ class SurveyDetailScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Documents
-            Text("Documents (${survey.documentPaths.length})", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            _buildSectionTitle('Documents (${survey.documentPaths.length})', theme),
             const SizedBox(height: 8),
-            if (survey.documentPaths.isEmpty) 
-              const Text("No documents attached", style: TextStyle(color: Colors.grey))
+            if (survey.documentPaths.isEmpty)
+              _buildCard(
+                isDark: isDark,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Center(
+                    child: Text('No documents attached', style: GoogleFonts.inter(color: Colors.grey)),
+                  ),
+                ),
+              )
             else
               SizedBox(
-                height: 120,
+                height: 130,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: survey.documentPaths.length,
@@ -118,17 +135,20 @@ class SurveyDetailScreen extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.only(right: 8.0),
                       child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(12),
                         child: Image.network(
-                          path, // On web, this is a blob URL. On mobile this needs fix (conditional import)
+                          path,
                           width: 120,
-                          height: 120,
+                          height: 130,
                           fit: BoxFit.cover,
                           errorBuilder: (c, o, s) => Container(
-                            width: 120, 
-                            height: 120, 
-                            color: Colors.grey.shade200, 
-                            child: const Icon(Icons.broken_image)
+                            width: 120,
+                            height: 130,
+                            decoration: BoxDecoration(
+                              color: isDark ? const Color(0xFF2C2C2E) : Colors.grey.shade100,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(Icons.insert_drive_file, size: 36, color: Colors.grey),
                           ),
                         ),
                       ),
@@ -136,21 +156,185 @@ class SurveyDetailScreen extends StatelessWidget {
                   },
                 ),
               ),
+            const SizedBox(height: 24),
+
+            // Blockchain Hash Card
+            if (survey.blockchainHash.isNotEmpty) ...[
+              _buildSectionTitle('Blockchain Fingerprint', theme),
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFFFF8E1),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: isDark ? Colors.orange.withOpacity(0.3) : const Color(0xFFFFCC02),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.fingerprint, color: Color(0xFFFF9F0A), size: 20),
+                        const SizedBox(width: 8),
+                        Text(
+                          'SHA-256 Hash',
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color: const Color(0xFFFF9F0A),
+                          ),
+                        ),
+                        const Spacer(),
+                        // Copy button
+                        GestureDetector(
+                          onTap: () {
+                            Clipboard.setData(ClipboardData(text: survey.blockchainHash));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Hash copied to clipboard'),
+                                duration: Duration(seconds: 2),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFF9F0A).withOpacity(0.15),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.copy_rounded, size: 14, color: Color(0xFFFF9F0A)),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Copy',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFFFF9F0A),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF0A0A0A) : Colors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: isDark ? Colors.grey.shade800 : Colors.grey.shade200),
+                      ),
+                      child: Text(
+                        survey.blockchainHash,
+                        style: GoogleFonts.robotoMono(
+                          fontSize: 11,
+                          color: isDark ? Colors.green.shade300 : Colors.green.shade700,
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'This hash uniquely identifies this survey record. Any tampering with the data will change this value.',
+                      style: GoogleFonts.inter(
+                        fontSize: 12,
+                        color: isDark ? Colors.grey.shade500 : Colors.grey.shade600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+            const SizedBox(height: 24),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String label, String value) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, size: 20, color: Colors.grey),
-        const SizedBox(width: 8),
-        SizedBox(width: 80, child: Text(label, style: const TextStyle(color: Colors.grey))),
-        Expanded(child: Text(value, style: const TextStyle(fontWeight: FontWeight.w500))),
-      ],
+  Widget _buildSectionTitle(String title, ThemeData theme) {
+    return Text(
+      title,
+      style: GoogleFonts.inter(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        color: theme.colorScheme.onSurface,
+      ),
     );
+  }
+
+  Widget _buildCard({required bool isDark, required Widget child}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: isDark ? null : Border.all(color: Colors.grey.shade200),
+      ),
+      child: child,
+    );
+  }
+
+  Widget _buildStatusChip({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required bool isDark,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withOpacity(isDark ? 0.15 : 0.08),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 15, color: color),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: color),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String label, String value, bool isDark) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 18, color: Colors.grey.shade500),
+          const SizedBox(width: 12),
+          SizedBox(
+            width: 72,
+            child: Text(label, style: GoogleFonts.inter(color: Colors.grey.shade500, fontSize: 13)),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w500,
+                color: isDark ? Colors.white : Colors.black87,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDivider(bool isDark) {
+    return Divider(height: 1, indent: 16, endIndent: 16, color: isDark ? Colors.grey.shade800 : Colors.grey.shade200);
   }
 }

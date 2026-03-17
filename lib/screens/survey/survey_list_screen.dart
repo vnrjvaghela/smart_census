@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_census/models/survey_model.dart';
 import 'package:smart_census/services/database_service.dart';
 import 'package:smart_census/screens/survey/survey_detail_screen.dart';
+import 'package:intl/intl.dart';
 
 class SurveyListScreen extends StatefulWidget {
   const SurveyListScreen({super.key});
@@ -32,111 +34,261 @@ class _SurveyListScreenState extends State<SurveyListScreen> {
   }
 
   void _applyFilters() {
-    _filteredSurveys = _allSurveys.where((survey) {
-      final matchesSearch = survey.householdId.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          survey.address.toLowerCase().contains(_searchQuery.toLowerCase());
-      
-      if (_filterStatus == 'All') return matchesSearch;
-      if (_filterStatus == 'Pending') return matchesSearch && !survey.isSynced;
-      if (_filterStatus == 'Uploaded') return matchesSearch && survey.isSynced;
-      return false;
-    }).toList();
+    setState(() {
+      _filteredSurveys = _allSurveys.where((survey) {
+        final matchesSearch = survey.householdId.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+            survey.address.toLowerCase().contains(_searchQuery.toLowerCase());
+        
+        if (_filterStatus == 'All') return matchesSearch;
+        if (_filterStatus == 'Pending') return matchesSearch && !survey.isSynced;
+        if (_filterStatus == 'Uploaded') return matchesSearch && survey.isSynced;
+        return false;
+      }).toList();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    final primaryColor = theme.colorScheme.primary;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('All Surveys'),
-        backgroundColor: Theme.of(context).primaryColor,
-        foregroundColor: Colors.white,
       ),
       body: Column(
         children: [
-          // Search & Filter Bar
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
+          // Search & Filter Bar Section
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: isDark ? Colors.grey.shade900 : Colors.grey.shade200)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      hintText: 'Search by ID or Address',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+                // Search Bar
+                TextField(
+                  style: GoogleFonts.inter(color: theme.colorScheme.onSurface),
+                  decoration: InputDecoration(
+                    hintText: 'Search by ID or address...',
+                    hintStyle: GoogleFonts.inter(color: Colors.grey.shade600),
+                    prefixIcon: Icon(Icons.search, color: Colors.grey.shade500),
+                    filled: true,
+                    fillColor: isDark ? const Color(0xFF2C2C2E) : Colors.grey.shade100,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        _searchQuery = value;
-                        _applyFilters();
-                      });
-                    },
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: primaryColor, width: 1.5),
+                    ),
                   ),
-                ),
-                const SizedBox(width: 8),
-                DropdownButton<String>(
-                  value: _filterStatus,
                   onChanged: (value) {
-                    setState(() {
-                      _filterStatus = value!;
-                      _applyFilters();
-                    });
+                    _searchQuery = value;
+                    _applyFilters();
                   },
-                  items: ['All', 'Pending', 'Uploaded']
-                      .map((e) => DropdownMenuItem(value: e, child: Text(e)))
-                      .toList(),
+                ),
+                const SizedBox(height: 16),
+                
+                // Filter Chips
+                Row(
+                  children: [
+                    _buildFilterChip('All', isDark, primaryColor),
+                    const SizedBox(width: 8),
+                    _buildFilterChip('Pending', isDark, primaryColor),
+                    const SizedBox(width: 8),
+                    _buildFilterChip('Uploaded', isDark, primaryColor),
+                  ],
                 ),
               ],
             ),
           ),
 
-          // List
+          // List View
           Expanded(
             child: _filteredSurveys.isEmpty
                 ? Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text("🚀", style: TextStyle(fontSize: 48)),
+                        Icon(Icons.assignment_outlined, size: 64, color: isDark ? Colors.grey.shade800 : Colors.grey.shade300),
                         const SizedBox(height: 16),
                         Text(
                           _allSurveys.isEmpty 
-                            ? "Start your first survey!" 
-                            : "No surveys match your filters 🔍", 
-                          style: const TextStyle(fontSize: 16, color: Colors.grey)
+                            ? "No surveys yet." 
+                            : "No surveys match your search.", 
+                          style: GoogleFonts.inter(fontSize: 16, color: Colors.grey.shade500)
                         ),
                       ],
                     )
                   )
                 : ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                     itemCount: _filteredSurveys.length,
                     itemBuilder: (context, index) {
                       final survey = _filteredSurveys[index];
-                      return Card(
-                        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: survey.isSynced ? const Color(0xFFE8F5E9) : const Color(0xFFFFF3E0),
-                            child: Icon(
-                              survey.isSynced ? Icons.check_circle_rounded : Icons.sync_problem_rounded,
-                              color: survey.isSynced ? const Color(0xFF2E7D32) : const Color(0xFFFF6F00),
-                            ),
-                          ),
-                          title: Text(survey.householdId, style: const TextStyle(fontWeight: FontWeight.bold)),
-                          subtitle: Text("${survey.members.length} Members • ${survey.address}"),
-                          onTap: () {
-                            Navigator.push(
-                              context, 
-                              MaterialPageRoute(builder: (_) => SurveyDetailScreen(survey: survey))
-                            );
-                          },
-                        ),
-                      );
+                      return _buildSurveyCard(survey, theme, isDark);
                     },
                   ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildFilterChip(String label, bool isDark, Color primaryColor) {
+    final isSelected = _filterStatus == label;
+    return GestureDetector(
+      onTap: () {
+        _filterStatus = label;
+        _applyFilters();
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: isSelected 
+              ? primaryColor 
+              : (isDark ? const Color(0xFF2C2C2E) : Colors.grey.shade200),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          label,
+          style: GoogleFonts.inter(
+            fontSize: 14,
+            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+            color: isSelected 
+                ? Colors.white 
+                : (isDark ? Colors.grey.shade400 : Colors.grey.shade700),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSurveyCard(SurveyModel survey, ThemeData theme, bool isDark) {
+    final bool isPending = !survey.isSynced;
+    final cardColor = theme.cardTheme.color;
+    final textColor = theme.colorScheme.onSurface;
+    final mutedColor = isDark ? Colors.grey.shade400 : Colors.grey.shade600;
+    
+    // Formatting date (Assuming timestamp is a string in ISO format for simplicity, adjust if necessary)
+    String dateStr = "Unknown";
+    try {
+      final date = survey.timestamp;
+      dateStr = DateFormat('dd MMM').format(date);
+    } catch (_) {
+      // Fallback
+    }
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context, 
+          MaterialPageRoute(builder: (_) => SurveyDetailScreen(survey: survey))
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(16),
+          border: isDark ? null : Border.all(color: Colors.grey.shade200),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    survey.householdId,
+                    style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: textColor),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isPending ? Colors.orange.withOpacity(0.1) : Colors.green.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        isPending ? Icons.cloud_upload_outlined : Icons.cloud_done_outlined,
+                        size: 14,
+                        color: isPending ? Colors.orange : Colors.green,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        isPending ? "Pending" : "Uploaded",
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: isPending ? Colors.orange : Colors.green,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                // Small indicator dot
+                Container(
+                  width: 8,
+                  height: 8,
+                  decoration: const BoxDecoration(
+                    color: Colors.orange, // Assuming default surveyor color as per screenshot
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  survey.address, // Showing address as main subtitle like screenshot
+                  style: GoogleFonts.inter(fontSize: 14, color: mutedColor),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const Spacer(),
+                Icon(Icons.chevron_right, color: Colors.grey.shade600, size: 20),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.people_alt_outlined, size: 16, color: mutedColor),
+                    const SizedBox(width: 6),
+                    Text(
+                      "${survey.members.length}",
+                      style: GoogleFonts.inter(fontSize: 13, color: mutedColor),
+                    ),
+                  ],
+                ),
+                Text(
+                  dateStr,
+                  style: GoogleFonts.inter(fontSize: 13, color: mutedColor),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

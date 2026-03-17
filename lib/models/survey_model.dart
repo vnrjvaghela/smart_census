@@ -26,6 +26,9 @@ class SurveyModel {
   @HiveField(6)
   final List<String> documentPaths; // Local paths to images
 
+  @HiveField(12)
+  final List<String> documentUrls; // Cloud URLs from Firebase Storage
+
   @HiveField(7)
   final bool isSynced;
 
@@ -49,6 +52,7 @@ class SurveyModel {
     required this.longitude,
     required this.members,
     this.documentPaths = const [],
+    this.documentUrls = const [],
     this.isSynced = false,
     this.status = 'Draft',
     required this.timestamp,
@@ -65,6 +69,7 @@ class SurveyModel {
       'longitude': longitude,
       'members': members.map((m) => m.toJson()).toList(),
       'documentPaths': documentPaths,
+      'documentUrls': documentUrls,
       'isSynced': isSynced,
       'status': status,
       'timestamp': timestamp.toIso8601String(),
@@ -84,6 +89,7 @@ class SurveyModel {
           ?.map((e) => FamilyMember.fromJson(e))
           .toList() ?? [],
       documentPaths: List<String>.from(json['documentPaths'] ?? []),
+      documentUrls: List<String>.from(json['documentUrls'] ?? []),
       isSynced: json['isSynced'] ?? true, // Assume synced if coming from cloud
       status: json['status'] ?? 'Pending',
       timestamp: DateTime.tryParse(json['timestamp'] ?? '') ?? DateTime.now(),

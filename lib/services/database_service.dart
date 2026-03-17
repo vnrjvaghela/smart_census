@@ -4,6 +4,7 @@ import 'package:smart_census/models/family_member_model.dart';
 
 class DatabaseService {
   static const String surveyBoxName = 'surveys';
+  static const String draftBoxName = 'draft_survey';
 
   // Initialize Hive and Open Boxes (Call this in main.dart)
   static Future<void> init() async {
@@ -24,7 +25,8 @@ class DatabaseService {
       // Hive.registerAdapter(UserModelAdapter()); // Uncomment when User model is ready
       
       await Hive.openBox<SurveyModel>(surveyBoxName);
-      print("DEBUG: Hive box '$surveyBoxName' opened");
+      await Hive.openBox<SurveyModel>(draftBoxName);
+      print("DEBUG: Hive boxes opened");
     } catch (e) {
       print("DEBUG: DatabaseService.init ERROR: $e");
       rethrow;
@@ -49,8 +51,24 @@ class DatabaseService {
     await surveyBox.delete(id);
   }
 
+  // --- Draft Management ---
+  Box<SurveyModel> get draftBox => Hive.box<SurveyModel>(draftBoxName);
+
+  Future<void> saveDraft(SurveyModel draft) async {
+    await draftBox.put('active_draft', draft);
+  }
+
+  SurveyModel? getActiveDraft() {
+    return draftBox.get('active_draft');
+  }
+
+  Future<void> deleteDraft() async {
+    await draftBox.delete('active_draft');
+  }
+
   // Clear All Data
   Future<void> clearAll() async {
     await surveyBox.clear();
+    await draftBox.clear();
   }
 }
