@@ -25,20 +25,38 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  // --- TEST MODE CREDENTIALS ---
+  static const String _testPhone = '9999999999';
+  static const String _testOtp = '123456';
+
   Future<void> _sendOTP() async {
+    final phone = _phoneController.text.trim();
 
-
-    if (_phoneController.text.length < 10) {
+    if (phone.length < 10) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter a valid phone number')),
       );
+      return;
+    }
+
+    // ✅ TEST MODE BYPASS
+    if (phone == _testPhone) {
+      setState(() {
+        _loading = false;
+        _otpSent = true;
+      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Test Mode: OTP is 123456')),
+        );
+      }
       return;
     }
     
     setState(() => _loading = true);
 
     await AuthService().verifyPhoneNumber(
-      '+91${_phoneController.text}',
+      '+91$phone',
       onVerificationCompleted: (credential) async {
         await AuthService().signInWithCredential(credential);
         setState(() => _loading = false);
@@ -76,6 +94,17 @@ class _LoginScreenState extends State<LoginScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter a valid 6-digit OTP')),
       );
+      return;
+    }
+
+    // ✅ TEST MODE BYPASS
+    if (_phoneController.text.trim() == _testPhone && _otpController.text == _testOtp) {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+      }
       return;
     }
 

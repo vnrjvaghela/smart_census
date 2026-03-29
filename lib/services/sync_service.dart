@@ -1,15 +1,20 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:smart_census/models/survey_model.dart';
 import 'package:smart_census/services/database_service.dart';
 
+// dart:io is only available on mobile/desktop, not on the web.
+// Firebase Storage image upload is conditionally compiled using kIsWeb.
+// ignore: uri_does_not_exist
+import 'package:smart_census/services/sync_service_io.dart'
+    if (dart.library.html) 'package:smart_census/services/sync_service_web.dart'
+    as platform_upload;
+
 class SyncService {
-  final _firestore = FirebaseFirestore.instance; // Lazy init locally if needed
-  final _storage = FirebaseStorage.instance;
+  final _firestore = FirebaseFirestore.instance;
   final DatabaseService _localDb = DatabaseService();
 
-  // Upload all pending surveys
+  /// Upload all pending surveys to Firestore.
   Future<int> uploadPendingSurveys() async {
     final allSurveys = _localDb.getAllSurveys();
     final pendingSurveys = allSurveys.where((s) => !s.isSynced).toList();
@@ -20,30 +25,31 @@ class SyncService {
         await _uploadSingleSurvey(survey);
         syncedCount++;
       } catch (e) {
-        print("Failed to sync survey ${survey.id}: $e");
+        print('Failed to sync survey ${survey.id}: $e');
       }
     }
     return syncedCount;
   }
 
-  // Upload a single survey including its images
+  /// Upload a single survey with its images (platform-adaptive).
   Future<void> _uploadSingleSurvey(SurveyModel survey) async {
-    // 1. Upload Images and get URLs
+    // 1. Upload images conditionally (mobile/desktop only; skipped on web)
     List<String> cloudImageUrls = [];
-    
-    for (String localPath in survey.documentPaths) {
-      final url = await _uploadImage(localPath, survey.id);
-      if (url != null) cloudImageUrls.add(url);
+    if (!kIsWeb) {
+      for (final localPath in survey.documentPaths) {
+        final url = await platform_upload.uploadImage(localPath, survey.id);
+        if (url != null) cloudImageUrls.add(url);
+      }
     }
-    
-    // 2. Prepare Data for Firestore
+
+    // 2. Prepare data map for Firestore
     final data = survey.toJson();
-    data['documentUrls'] = cloudImageUrls; // Sync cloud URLs to Firestore
-    
-    // 3. Upload to Firestore
+    data['documentUrls'] = cloudImageUrls;
+
+    // 3. Write to Firestore
     await _firestore.collection('surveys').doc(survey.id).set(data);
 
-    // 4. Update Local Status
+    // 4. Update local record with synced status
     final updatedSurvey = SurveyModel(
       id: survey.id,
       householdId: survey.householdId,
@@ -52,8 +58,8 @@ class SyncService {
       longitude: survey.longitude,
       members: survey.members,
       documentPaths: survey.documentPaths,
-      documentUrls: cloudImageUrls, // Save cloud URLs locally too
-      isSynced: true, // Mark as Synced
+      documentUrls: cloudImageUrls,
+      isSynced: true,
       status: 'Uploaded',
       timestamp: survey.timestamp,
       aiVerified: survey.aiVerified,
@@ -61,24 +67,5 @@ class SyncService {
     );
 
     await DatabaseService().saveSurvey(updatedSurvey);
-  }
-
-  // Helper: Upload Image to Firebase Storage
-  Future<String?> _uploadImage(String filePath, String surveyId) async {
-    try {
-      final file = File(filePath);
-      if (!await file.exists()) return null;
-
-      final fileName = filePath.split('/').last;
-      final destination = 'surveys/$surveyId/$fileName';
-
-      final ref = _storage.ref(destination);
-      await ref.putFile(file);
-      
-      return await ref.getDownloadURL();
-    } catch (e) {
-      print("Error uploading image: $e");
-      return null;
-    }
   }
 }

@@ -132,12 +132,12 @@ class _Step1HouseholdState extends State<Step1Household> {
             children: [
               const Icon(Icons.warning_amber_rounded, color: Colors.orange),
               const SizedBox(width: 8),
-              Text('Duplicate Household', style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 17)),
+              Text('Duplicate Household', style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 17)),
             ],
           ),
           content: Text(
             'A survey for household ID "$_householdId" already exists.\nDo you want to create another survey for this household?',
-            style: GoogleFonts.inter(fontSize: 14),
+            style: GoogleFonts.poppins(fontSize: 14),
           ),
           actions: [
             TextButton(
@@ -202,7 +202,7 @@ class _Step1HouseholdState extends State<Step1Household> {
               // Progress Indicator
               const LinearProgressIndicator(value: 0.25),
               const SizedBox(height: 8),
-              Text("Step 1 of 4", style: GoogleFonts.outfit(color: Colors.grey)),
+              Text("Step 1 of 4", style: GoogleFonts.poppins(color: Colors.grey)),
               const SizedBox(height: 24),
 
               // Household ID
@@ -220,9 +220,9 @@ class _Step1HouseholdState extends State<Step1Household> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Household ID (Auto-generated)", style: GoogleFonts.outfit(fontSize: 12, color: Colors.grey.shade600, fontWeight: FontWeight.w500)),
+                            Text("Household ID (Auto-generated)", style: GoogleFonts.poppins(fontSize: 12, color: Colors.grey.shade600, fontWeight: FontWeight.w500)),
                             const SizedBox(height: 4),
-                            Text(_householdId, style: GoogleFonts.outfit(fontSize: 18, fontWeight: FontWeight.bold, color: const Color(0xFF1E293B))),
+                            Text(_householdId, style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: const Color(0xFF1E293B))),
                           ],
                         ),
                       ),
@@ -236,7 +236,7 @@ class _Step1HouseholdState extends State<Step1Household> {
               TextFormField(
                 controller: _addressController,
                 maxLines: 3,
-                style: GoogleFonts.outfit(fontSize: 16),
+                style: GoogleFonts.poppins(fontSize: 16),
                 decoration: const InputDecoration(
                   labelText: 'Full Address',
                   hintText: 'House No, Street, Landmark...',
@@ -252,7 +252,7 @@ class _Step1HouseholdState extends State<Step1Household> {
               const SizedBox(height: 24),
 
               // GPS Location
-              Text("Location", style: GoogleFonts.outfit(fontSize: 16, fontWeight: FontWeight.bold, color: const Color(0xFF1E293B))),
+              Text("Location", style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold, color: const Color(0xFF1E293B))),
               const SizedBox(height: 8),
               Container(
                 decoration: BoxDecoration(
@@ -275,13 +275,13 @@ class _Step1HouseholdState extends State<Step1Household> {
                   ),
                   title: Text(
                     _gpsLocation ?? "Location not captured",
-                    style: GoogleFonts.outfit(
+                    style: GoogleFonts.poppins(
                       color: _gpsLocation != null ? const Color(0xFF1E293B) : Colors.grey.shade500,
                       fontWeight: _gpsLocation != null ? FontWeight.bold : FontWeight.w500,
                       fontSize: 15,
                     ),
                   ),
-                  subtitle: _gpsLocation != null ? Text("Accuracy: High", style: GoogleFonts.outfit(fontSize: 13, color: Colors.grey.shade600)) : null,
+                  subtitle: _gpsLocation != null ? Text("Accuracy: High", style: GoogleFonts.poppins(fontSize: 13, color: Colors.grey.shade600)) : null,
                   trailing: ElevatedButton.icon(
                     onPressed: _gettingLocation ? null : _captureLocation,
                     icon: _gettingLocation 

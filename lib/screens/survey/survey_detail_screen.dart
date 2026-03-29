@@ -94,16 +94,16 @@ class SurveyDetailScreen extends StatelessWidget {
                       backgroundColor: theme.colorScheme.primary.withOpacity(0.15),
                       child: Text(
                         member.name.isNotEmpty ? member.name[0].toUpperCase() : '?',
-                        style: GoogleFonts.inter(
+                        style: GoogleFonts.poppins(
                           color: theme.colorScheme.primary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    title: Text(member.name, style: GoogleFonts.inter(fontWeight: FontWeight.bold)),
+                    title: Text(member.name, style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
                     subtitle: Text(
                       '${member.relation} • ${member.age} yrs • ${member.gender}',
-                      style: GoogleFonts.inter(fontSize: 13),
+                      style: GoogleFonts.poppins(fontSize: 13),
                     ),
                   );
                 },
@@ -120,7 +120,7 @@ class SurveyDetailScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Center(
-                    child: Text('No documents attached', style: GoogleFonts.inter(color: Colors.grey)),
+                    child: Text('No documents attached', style: GoogleFonts.poppins(color: Colors.grey)),
                   ),
                 ),
               )
@@ -180,7 +180,7 @@ class SurveyDetailScreen extends StatelessWidget {
                         const SizedBox(width: 8),
                         Text(
                           'SHA-256 Hash',
-                          style: GoogleFonts.inter(
+                          style: GoogleFonts.poppins(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                             color: const Color(0xFFFF9F0A),
@@ -243,7 +243,7 @@ class SurveyDetailScreen extends StatelessWidget {
                     const SizedBox(height: 8),
                     Text(
                       'This hash uniquely identifies this survey record. Any tampering with the data will change this value.',
-                      style: GoogleFonts.inter(
+                      style: GoogleFonts.poppins(
                         fontSize: 12,
                         color: isDark ? Colors.grey.shade500 : Colors.grey.shade600,
                       ),
@@ -262,7 +262,7 @@ class SurveyDetailScreen extends StatelessWidget {
   Widget _buildSectionTitle(String title, ThemeData theme) {
     return Text(
       title,
-      style: GoogleFonts.inter(
+      style: GoogleFonts.poppins(
         fontSize: 18,
         fontWeight: FontWeight.bold,
         color: theme.colorScheme.onSurface,
@@ -301,7 +301,7 @@ class SurveyDetailScreen extends StatelessWidget {
           const SizedBox(width: 6),
           Text(
             label,
-            style: GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, color: color),
+            style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w600, color: color),
           ),
         ],
       ),
@@ -318,12 +318,12 @@ class SurveyDetailScreen extends StatelessWidget {
           const SizedBox(width: 12),
           SizedBox(
             width: 72,
-            child: Text(label, style: GoogleFonts.inter(color: Colors.grey.shade500, fontSize: 13)),
+            child: Text(label, style: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 13)),
           ),
           Expanded(
             child: Text(
               value,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.poppins(
                 fontWeight: FontWeight.w500,
                 color: isDark ? Colors.white : Colors.black87,
               ),

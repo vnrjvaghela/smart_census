@@ -118,7 +118,7 @@ class _Step3DocumentsState extends State<Step3Documents> {
               ),
               Text(
                 'Add Document Photo',
-                style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold),
+                style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
               Row(
@@ -180,7 +180,7 @@ class _Step3DocumentsState extends State<Step3Documents> {
             const SizedBox(height: 8),
             Text(
               label,
-              style: GoogleFonts.inter(
+              style: GoogleFonts.poppins(
                 color: color,
                 fontWeight: FontWeight.w600,
                 fontSize: 14,
@@ -324,14 +324,14 @@ class _Step3DocumentsState extends State<Step3Documents> {
                 children: [
                   Text(
                     "Step 3 of 3 — Review & Submit",
-                    style: GoogleFonts.inter(color: Colors.grey.shade500, fontSize: 13),
+                    style: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 13),
                   ),
                   const SizedBox(height: 24),
 
                   // Household Section
                   Text(
                     "Household",
-                    style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
+                    style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
                   ),
                   const SizedBox(height: 12),
                   Container(
@@ -358,7 +358,7 @@ class _Step3DocumentsState extends State<Step3Documents> {
                     children: [
                       Text(
                         "Members",
-                        style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
+                        style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
@@ -368,7 +368,7 @@ class _Step3DocumentsState extends State<Step3Documents> {
                         ),
                         child: Text(
                           "${widget.members.length}",
-                          style: GoogleFonts.inter(color: const Color(0xFF0A84FF), fontWeight: FontWeight.bold),
+                          style: GoogleFonts.poppins(color: const Color(0xFF0A84FF), fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -384,7 +384,7 @@ class _Step3DocumentsState extends State<Step3Documents> {
                     children: [
                       Text(
                         "Documents",
-                        style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
+                        style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
@@ -394,7 +394,7 @@ class _Step3DocumentsState extends State<Step3Documents> {
                         ),
                         child: Text(
                           "${_capturedImages.length}",
-                          style: GoogleFonts.inter(color: const Color(0xFF0A84FF), fontWeight: FontWeight.bold),
+                          style: GoogleFonts.poppins(color: const Color(0xFF0A84FF), fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -426,9 +426,9 @@ class _Step3DocumentsState extends State<Step3Documents> {
                               children: [
                                 Icon(Icons.add_a_photo_rounded, size: 28, color: theme.colorScheme.primary),
                                 const SizedBox(height: 6),
-                                Text("Add Photo", style: GoogleFonts.inter(color: theme.colorScheme.primary, fontWeight: FontWeight.w600, fontSize: 13)),
+                                Text("Add Photo", style: GoogleFonts.poppins(color: theme.colorScheme.primary, fontWeight: FontWeight.w600, fontSize: 13)),
                                 const SizedBox(height: 2),
-                                Text("Camera / Gallery", style: GoogleFonts.inter(color: theme.colorScheme.primary.withOpacity(0.6), fontSize: 10)),
+                                Text("Camera / Gallery", style: GoogleFonts.poppins(color: theme.colorScheme.primary.withOpacity(0.6), fontSize: 10)),
                               ],
                             ),
                           ),
@@ -519,7 +519,7 @@ class _Step3DocumentsState extends State<Step3Documents> {
                   // Verification Section
                   Text(
                     "Verification",
-                    style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
+                    style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
                   ),
                   const SizedBox(height: 12),
                   Container(
@@ -584,7 +584,7 @@ class _Step3DocumentsState extends State<Step3Documents> {
                       children: [
                         const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)),
                         const SizedBox(width: 12),
-                        Text(_loadingMessage.isNotEmpty ? _loadingMessage : "Submitting...", style: GoogleFonts.inter(fontSize: 16)),
+                        Text(_loadingMessage.isNotEmpty ? _loadingMessage : "Submitting...", style: GoogleFonts.poppins(fontSize: 16)),
                       ],
                     )
                   : Row(
@@ -592,7 +592,7 @@ class _Step3DocumentsState extends State<Step3Documents> {
                       children: [
                         const Icon(Icons.send_rounded, size: 20),
                         const SizedBox(width: 8),
-                        Text("Submit Survey", style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w600)),
+                        Text("Submit Survey", style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600)),
                       ],
                     ),
               ),
@@ -615,11 +615,11 @@ class _Step3DocumentsState extends State<Step3Documents> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: GoogleFonts.inter(color: isDark ? Colors.grey.shade400 : Colors.grey.shade600, fontSize: 13)),
+                Text(title, style: GoogleFonts.poppins(color: isDark ? Colors.grey.shade400 : Colors.grey.shade600, fontSize: 13)),
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
-                  style: GoogleFonts.inter(
+                  style: GoogleFonts.poppins(
                     color: isDark ? Colors.white : Colors.black87,
                     fontSize: 15,
                     fontWeight: FontWeight.w500,
@@ -652,18 +652,18 @@ class _Step3DocumentsState extends State<Step3Documents> {
             backgroundColor: const Color(0xFF3E2723), // Deep brown/orange bg
             child: Text(
               member.name.isNotEmpty ? member.name[0].toUpperCase() : '?',
-              style: GoogleFonts.inter(color: const Color(0xFFFF9F0A), fontWeight: FontWeight.bold),
+              style: GoogleFonts.poppins(color: const Color(0xFFFF9F0A), fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(width: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(member.name, style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: textColor)),
+              Text(member.name, style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold, color: textColor)),
               const SizedBox(height: 4),
               Text(
                 "${member.age} yrs • ${member.gender} • ${member.relation}",
-                style: GoogleFonts.inter(fontSize: 13, color: isDark ? Colors.grey.shade400 : Colors.grey.shade600),
+                style: GoogleFonts.poppins(fontSize: 13, color: isDark ? Colors.grey.shade400 : Colors.grey.shade600),
               ),
             ],
           ),

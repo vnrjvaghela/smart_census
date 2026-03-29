@@ -117,7 +117,7 @@ class _Step2MembersState extends State<Step2Members> {
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
             child: Row(
               children: [
-                Text("Step 2 of 3 — Family Members", style: GoogleFonts.inter(color: Colors.grey.shade500, fontSize: 13)),
+                Text("Step 2 of 3 — Family Members", style: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 13)),
               ],
             ),
           ),
@@ -137,9 +137,9 @@ class _Step2MembersState extends State<Step2Members> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.householdId, style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16, color: theme.colorScheme.onSurface)),
+                    Text(widget.householdId, style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 16, color: theme.colorScheme.onSurface)),
                     const SizedBox(height: 4),
-                    Text(widget.address, style: GoogleFonts.inter(color: Colors.grey.shade500, fontSize: 14)),
+                    Text(widget.address, style: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 14)),
                   ],
                 ),
                 Row(
@@ -148,7 +148,7 @@ class _Step2MembersState extends State<Step2Members> {
                     const SizedBox(width: 6),
                     Text(
                       "${_members.length}",
-                      style: GoogleFonts.inter(color: theme.colorScheme.primary, fontWeight: FontWeight.bold, fontSize: 16),
+                      style: GoogleFonts.poppins(color: theme.colorScheme.primary, fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ],
                 ),
@@ -167,7 +167,7 @@ class _Step2MembersState extends State<Step2Members> {
                         const SizedBox(height: 16),
                         Text(
                           "Tap + to add members",
-                          style: GoogleFonts.inter(color: Colors.grey.shade500, fontSize: 16),
+                          style: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 16),
                         ),
                       ],
                     ),
@@ -198,7 +198,7 @@ class _Step2MembersState extends State<Step2Members> {
                                     backgroundColor: isDark ? const Color(0xFF2C2C2E) : Colors.blue.shade50,
                                     child: Text(
                                       member.name[0].toUpperCase(), 
-                                      style: GoogleFonts.inter(color: theme.colorScheme.primary, fontWeight: FontWeight.bold, fontSize: 18)
+                                      style: GoogleFonts.poppins(color: theme.colorScheme.primary, fontWeight: FontWeight.bold, fontSize: 18)
                                     ),
                                   ),
                                   const SizedBox(width: 16),
@@ -206,11 +206,11 @@ class _Step2MembersState extends State<Step2Members> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(member.name, style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16, color: theme.colorScheme.onSurface)),
+                                        Text(member.name, style: GoogleFonts.poppins(fontWeight: FontWeight.bold, fontSize: 16, color: theme.colorScheme.onSurface)),
                                         const SizedBox(height: 4),
                                         Text(
                                           "${member.age} yrs • ${member.gender} • ${member.relation}", 
-                                          style: GoogleFonts.inter(color: Colors.grey.shade500, fontSize: 13)
+                                          style: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 13)
                                         ),
                                       ],
                                     ),
@@ -269,7 +269,7 @@ class _Step2MembersState extends State<Step2Members> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Next Step", style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600)),
+                          Text("Next Step", style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600)),
                           const SizedBox(width: 8),
                           const Icon(Icons.arrow_forward_rounded, size: 18),
                         ],
@@ -380,7 +380,7 @@ class _AddMemberFormStatefulState extends State<_AddMemberFormStateful> {
 
               Text(
                 widget.editIndex == null ? 'Add Family Member' : 'Edit Member',
-                style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: widget.theme.colorScheme.onSurface),
+                style: GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold, color: widget.theme.colorScheme.onSurface),
               ),
               const SizedBox(height: 24),
 
@@ -396,7 +396,7 @@ class _AddMemberFormStatefulState extends State<_AddMemberFormStateful> {
               _buildLabel("Age"),
               TextFormField(
                 controller: _ageController,
-                style: GoogleFonts.inter(color: widget.theme.colorScheme.onSurface),
+                style: GoogleFonts.poppins(color: widget.theme.colorScheme.onSurface),
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(hintText: "Enter age"),
                 validator: (v) => v!.isEmpty ? 'Required' : null,
@@ -447,7 +447,7 @@ class _AddMemberFormStatefulState extends State<_AddMemberFormStateful> {
                           foregroundColor: widget.isDark ? Colors.white : Colors.black87,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
-                        child: Text("Cancel", style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+                        child: Text("Cancel", style: GoogleFonts.poppins(fontWeight: FontWeight.w600)),
                       ),
                     ),
                   ),
@@ -476,7 +476,7 @@ class _AddMemberFormStatefulState extends State<_AddMemberFormStateful> {
                           backgroundColor: widget.theme.colorScheme.primary, // Blue button
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
-                        child: Text(widget.editIndex == null ? "Add" : "Save", style: GoogleFonts.inter(fontWeight: FontWeight.w600, color: Colors.white)),
+                        child: Text(widget.editIndex == null ? "Add" : "Save", style: GoogleFonts.poppins(fontWeight: FontWeight.w600, color: Colors.white)),
                       ),
                     ),
                   ),
@@ -494,7 +494,7 @@ class _AddMemberFormStatefulState extends State<_AddMemberFormStateful> {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: Text(
         text,
-        style: GoogleFonts.inter(fontSize: 12, color: widget.isDark ? Colors.grey.shade400 : Colors.grey.shade600, fontWeight: FontWeight.w500),
+        style: GoogleFonts.poppins(fontSize: 12, color: widget.isDark ? Colors.grey.shade400 : Colors.grey.shade600, fontWeight: FontWeight.w500),
       ),
     );
   }
@@ -507,7 +507,7 @@ class _AddMemberFormStatefulState extends State<_AddMemberFormStateful> {
       onSelected: (selected) {
         if (selected) onSelect(label);
       },
-      labelStyle: GoogleFonts.inter(
+      labelStyle: GoogleFonts.poppins(
         color: isSelected ? Colors.white : (widget.isDark ? Colors.grey.shade400 : Colors.grey.shade700),
         fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
       ),

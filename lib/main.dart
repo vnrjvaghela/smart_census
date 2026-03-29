@@ -56,12 +56,12 @@ class MyApp extends StatelessWidget {
         onSurface: Color(0xFF1E293B),
       ),
       scaffoldBackgroundColor: const Color(0xFFF3F4F6),
-      textTheme: GoogleFonts.interTextTheme(ThemeData.light().textTheme),
+      textTheme: GoogleFonts.poppinsTextTheme(ThemeData.light().textTheme),
       appBarTheme: AppBarTheme(
         centerTitle: false,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        titleTextStyle: GoogleFonts.inter(
+        titleTextStyle: GoogleFonts.poppins(
           color: const Color(0xFF1E293B),
           fontSize: 24,
           fontWeight: FontWeight.w700,
@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           backgroundColor: const Color(0xFF007AFF),
           foregroundColor: Colors.white,
-          textStyle: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 16),
+          textStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 16),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -116,12 +116,12 @@ class MyApp extends StatelessWidget {
         onSurface: Colors.white,
       ),
       scaffoldBackgroundColor: const Color(0xFF0A0A0A), // Pure Dark Background
-      textTheme: GoogleFonts.interTextTheme(ThemeData.dark().textTheme),
+      textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme),
       appBarTheme: AppBarTheme(
         centerTitle: false,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        titleTextStyle: GoogleFonts.inter(
+        titleTextStyle: GoogleFonts.poppins(
           color: Colors.white,
           fontSize: 24,
           fontWeight: FontWeight.w700,
@@ -142,7 +142,7 @@ class MyApp extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           backgroundColor: const Color(0xFF0A84FF),
           foregroundColor: Colors.white,
-          textStyle: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 16),
+          textStyle: GoogleFonts.poppins(fontWeight: FontWeight.w600, fontSize: 16),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
