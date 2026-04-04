@@ -118,7 +118,8 @@ class _Step3DocumentsState extends State<Step3Documents> {
               ),
               Text(
                 'Add Document Photo',
-                style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold),
+                style: GoogleFonts.poppins(
+                    fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
               Row(
@@ -226,12 +227,13 @@ class _Step3DocumentsState extends State<Step3Documents> {
       bool isAiVerified = _verificationResults.values.any((v) => v == true);
 
       setState(() {
-         _loadingMessage = 'Generating Blockchain Hash...';
+        _loadingMessage = 'Generating Blockchain Hash...';
       });
 
       // 2. Create the Survey Model
       SurveyModel survey = SurveyModel(
-        id: widget.existingSurvey?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
+        id: widget.existingSurvey?.id ??
+            DateTime.now().millisecondsSinceEpoch.toString(),
         householdId: widget.householdId,
         address: widget.address,
         latitude: double.parse(widget.gpsLocation.split(',')[0].trim()),
@@ -247,7 +249,7 @@ class _Step3DocumentsState extends State<Step3Documents> {
 
       // 3. Generate Crypto Hash
       final hash = CryptoUtils.generateSurveyHash(survey);
-      
+
       // 4. Update model with hash
       survey = SurveyModel(
         id: survey.id,
@@ -261,7 +263,7 @@ class _Step3DocumentsState extends State<Step3Documents> {
         status: survey.status,
         isSynced: false,
         aiVerified: isAiVerified,
-        blockchainHash: hash, 
+        blockchainHash: hash,
       );
 
       await DatabaseService().saveSurvey(survey);
@@ -269,14 +271,14 @@ class _Step3DocumentsState extends State<Step3Documents> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(
+          SnackBar(
             content: Text('Survey submitted successfully!'),
             backgroundColor: Colors.green,
           ),
         );
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
+          MaterialPageRoute(builder: (_) => const HomeScreen(initialIndex: 1)),
           (Route<dynamic> route) => false,
         );
       }
@@ -289,8 +291,8 @@ class _Step3DocumentsState extends State<Step3Documents> {
     } finally {
       if (mounted) {
         setState(() {
-           _saving = false;
-           _loadingMessage = '';
+          _saving = false;
+          _loadingMessage = '';
         });
       }
     }
@@ -318,35 +320,45 @@ class _Step3DocumentsState extends State<Step3Documents> {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "Step 3 of 3 — Review & Submit",
-                    style: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 13),
+                    style: GoogleFonts.poppins(
+                        color: Colors.grey.shade500, fontSize: 13),
                   ),
                   const SizedBox(height: 24),
 
                   // Household Section
                   Text(
                     "Household",
-                    style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
+                    style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: textColor),
                   ),
                   const SizedBox(height: 12),
                   Container(
                     decoration: BoxDecoration(
                       color: cardColor,
                       borderRadius: BorderRadius.circular(16),
-                      border: isDark ? null : Border.all(color: Colors.grey.shade200),
+                      border: isDark
+                          ? null
+                          : Border.all(color: Colors.grey.shade200),
                     ),
                     child: Column(
                       children: [
-                        _buildInfoRow(Icons.tag, 'ID', widget.householdId, const Color(0xFF0A84FF), isDark),
+                        _buildInfoRow(Icons.tag, 'ID', widget.householdId,
+                            const Color(0xFF0A84FF), isDark),
                         _buildDivider(isDark),
-                        _buildInfoRow(Icons.home_outlined, 'Address', widget.address, const Color(0xFFFF9F0A), isDark),
+                        _buildInfoRow(Icons.home_outlined, 'Address',
+                            widget.address, const Color(0xFFFF9F0A), isDark),
                         _buildDivider(isDark),
-                        _buildInfoRow(Icons.location_on_outlined, 'GPS', widget.gpsLocation, Colors.green, isDark),
+                        _buildInfoRow(Icons.location_on_outlined, 'GPS',
+                            widget.gpsLocation, Colors.green, isDark),
                       ],
                     ),
                   ),
@@ -358,24 +370,31 @@ class _Step3DocumentsState extends State<Step3Documents> {
                     children: [
                       Text(
                         "Members",
-                        style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
+                        style: GoogleFonts.poppins(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: textColor),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 2),
                         decoration: BoxDecoration(
                           color: const Color(0xFF1E3A5F),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           "${widget.members.length}",
-                          style: GoogleFonts.poppins(color: const Color(0xFF0A84FF), fontWeight: FontWeight.bold),
+                          style: GoogleFonts.poppins(
+                              color: const Color(0xFF0A84FF),
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 12),
-                  ...widget.members.map((member) => _buildMemberCard(member, cardColor ?? Colors.white, textColor, isDark)),
-                  
+                  ...widget.members.map((member) => _buildMemberCard(
+                      member, cardColor ?? Colors.white, textColor, isDark)),
+
                   const SizedBox(height: 32),
 
                   // Documents Section
@@ -384,17 +403,23 @@ class _Step3DocumentsState extends State<Step3Documents> {
                     children: [
                       Text(
                         "Documents",
-                        style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
+                        style: GoogleFonts.poppins(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: textColor),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 2),
                         decoration: BoxDecoration(
                           color: const Color(0xFF1E3A5F),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Text(
                           "${_capturedImages.length}",
-                          style: GoogleFonts.poppins(color: const Color(0xFF0A84FF), fontWeight: FontWeight.bold),
+                          style: GoogleFonts.poppins(
+                              color: const Color(0xFF0A84FF),
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -404,7 +429,8 @@ class _Step3DocumentsState extends State<Step3Documents> {
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
@@ -417,24 +443,39 @@ class _Step3DocumentsState extends State<Step3Documents> {
                           onTap: _showAddPhotoOptions,
                           child: Container(
                             decoration: BoxDecoration(
-                              color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFEEF2FF),
-                              border: Border.all(color: theme.colorScheme.primary.withOpacity(0.5), style: BorderStyle.solid, width: 2),
+                              color: isDark
+                                  ? const Color(0xFF1C1C1E)
+                                  : const Color(0xFFEEF2FF),
+                              border: Border.all(
+                                  color: theme.colorScheme.primary
+                                      .withOpacity(0.5),
+                                  style: BorderStyle.solid,
+                                  width: 2),
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.add_a_photo_rounded, size: 28, color: theme.colorScheme.primary),
+                                Icon(Icons.add_a_photo_rounded,
+                                    size: 28, color: theme.colorScheme.primary),
                                 const SizedBox(height: 6),
-                                Text("Add Photo", style: GoogleFonts.poppins(color: theme.colorScheme.primary, fontWeight: FontWeight.w600, fontSize: 13)),
+                                Text("Add Photo",
+                                    style: GoogleFonts.poppins(
+                                        color: theme.colorScheme.primary,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 13)),
                                 const SizedBox(height: 2),
-                                Text("Camera / Gallery", style: GoogleFonts.poppins(color: theme.colorScheme.primary.withOpacity(0.6), fontSize: 10)),
+                                Text("Camera / Gallery",
+                                    style: GoogleFonts.poppins(
+                                        color: theme.colorScheme.primary
+                                            .withOpacity(0.6),
+                                        fontSize: 10)),
                               ],
                             ),
                           ),
                         );
                       }
-                      
+
                       final imagePath = _capturedImages[index - 1];
                       final verifyResult = _verificationResults[imagePath];
                       return Stack(
@@ -447,10 +488,17 @@ class _Step3DocumentsState extends State<Step3Documents> {
                               fit: BoxFit.cover,
                               errorBuilder: (c, o, s) => Container(
                                 decoration: BoxDecoration(
-                                  color: isDark ? const Color(0xFF2C2C2E) : Colors.grey.shade100,
+                                  color: isDark
+                                      ? const Color(0xFF2C2C2E)
+                                      : Colors.grey.shade100,
                                   borderRadius: BorderRadius.circular(16),
                                 ),
-                                child: Center(child: Icon(Icons.insert_drive_file, color: isDark ? Colors.grey.shade600 : Colors.grey, size: 40)),
+                                child: Center(
+                                    child: Icon(Icons.insert_drive_file,
+                                        color: isDark
+                                            ? Colors.grey.shade600
+                                            : Colors.grey,
+                                        size: 40)),
                               ),
                             ),
                           ),
@@ -460,7 +508,8 @@ class _Step3DocumentsState extends State<Step3Documents> {
                               bottom: 6,
                               left: 6,
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6, vertical: 3),
                                 decoration: BoxDecoration(
                                   color: verifyResult == null
                                       ? Colors.black54
@@ -473,17 +522,31 @@ class _Step3DocumentsState extends State<Step3Documents> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     if (verifyResult == null)
-                                      const SizedBox(width: 10, height: 10, child: CircularProgressIndicator(strokeWidth: 1.5, color: Colors.white))
+                                      const SizedBox(
+                                          width: 10,
+                                          height: 10,
+                                          child: CircularProgressIndicator(
+                                              strokeWidth: 1.5,
+                                              color: Colors.white))
                                     else
                                       Icon(
-                                        verifyResult == true ? Icons.verified_rounded : Icons.cancel_rounded,
+                                        verifyResult == true
+                                            ? Icons.verified_rounded
+                                            : Icons.cancel_rounded,
                                         size: 11,
                                         color: Colors.white,
                                       ),
                                     const SizedBox(width: 4),
                                     Text(
-                                      verifyResult == null ? 'OCR...' : verifyResult == true ? 'Verified' : 'Not verified',
-                                      style: const TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.w600),
+                                      verifyResult == null
+                                          ? 'OCR...'
+                                          : verifyResult == true
+                                              ? 'Verified'
+                                              : 'Not verified',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 9,
+                                          fontWeight: FontWeight.w600),
                                     ),
                                   ],
                                 ),
@@ -506,7 +569,8 @@ class _Step3DocumentsState extends State<Step3Documents> {
                                   color: Colors.black54,
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(Icons.close_rounded, size: 14, color: Colors.white),
+                                child: const Icon(Icons.close_rounded,
+                                    size: 14, color: Colors.white),
                               ),
                             ),
                           ),
@@ -519,14 +583,19 @@ class _Step3DocumentsState extends State<Step3Documents> {
                   // Verification Section
                   Text(
                     "Verification",
-                    style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.bold, color: textColor),
+                    style: GoogleFonts.poppins(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: textColor),
                   ),
                   const SizedBox(height: 12),
                   Container(
                     decoration: BoxDecoration(
                       color: cardColor,
                       borderRadius: BorderRadius.circular(16),
-                      border: isDark ? null : Border.all(color: Colors.grey.shade200),
+                      border: isDark
+                          ? null
+                          : Border.all(color: Colors.grey.shade200),
                     ),
                     child: Column(
                       children: [
@@ -537,9 +606,11 @@ class _Step3DocumentsState extends State<Step3Documents> {
                               ? 'Not available on web'
                               : _capturedImages.isEmpty
                                   ? 'Add a document to verify'
-                                  : _verificationResults.values.any((v) => v == true)
+                                  : _verificationResults.values
+                                          .any((v) => v == true)
                                       ? '✅ At least one document verified'
-                                      : _verificationResults.values.any((v) => v == null)
+                                      : _verificationResults.values
+                                              .any((v) => v == null)
                                           ? '⏳ Scanning documents...'
                                           : '❌ No documents verified by OCR',
                           const Color(0xFF0A84FF),
@@ -566,7 +637,11 @@ class _Step3DocumentsState extends State<Step3Documents> {
             padding: const EdgeInsets.all(24.0),
             decoration: BoxDecoration(
               color: isDark ? const Color(0xFF0A0A0A) : Colors.white,
-              border: Border(top: BorderSide(color: isDark ? Colors.grey.shade900 : Colors.grey.shade200)),
+              border: Border(
+                  top: BorderSide(
+                      color: isDark
+                          ? Colors.grey.shade900
+                          : Colors.grey.shade200)),
             ),
             child: SizedBox(
               width: double.infinity,
@@ -574,27 +649,39 @@ class _Step3DocumentsState extends State<Step3Documents> {
               child: ElevatedButton(
                 onPressed: _saving ? null : _submitSurvey,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFFF6F00), // Prominent Orange Submit Button
+                  backgroundColor:
+                      const Color(0xFFFF6F00), // Prominent Orange Submit Button
                   foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14)),
                 ),
-                child: _saving 
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2)),
-                        const SizedBox(width: 12),
-                        Text(_loadingMessage.isNotEmpty ? _loadingMessage : "Submitting...", style: GoogleFonts.poppins(fontSize: 16)),
-                      ],
-                    )
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.send_rounded, size: 20),
-                        const SizedBox(width: 8),
-                        Text("Submit Survey", style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.w600)),
-                      ],
-                    ),
+                child: _saving
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                  color: Colors.white, strokeWidth: 2)),
+                          const SizedBox(width: 12),
+                          Text(
+                              _loadingMessage.isNotEmpty
+                                  ? _loadingMessage
+                                  : "Submitting...",
+                              style: GoogleFonts.poppins(fontSize: 16)),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.send_rounded, size: 20),
+                          const SizedBox(width: 8),
+                          Text("Submit Survey",
+                              style: GoogleFonts.poppins(
+                                  fontSize: 18, fontWeight: FontWeight.w600)),
+                        ],
+                      ),
               ),
             ),
           ),
@@ -603,7 +690,8 @@ class _Step3DocumentsState extends State<Step3Documents> {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String title, String subtitle, Color iconColor, bool isDark) {
+  Widget _buildInfoRow(IconData icon, String title, String subtitle,
+      Color iconColor, bool isDark) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Row(
@@ -615,7 +703,12 @@ class _Step3DocumentsState extends State<Step3Documents> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: GoogleFonts.poppins(color: isDark ? Colors.grey.shade400 : Colors.grey.shade600, fontSize: 13)),
+                Text(title,
+                    style: GoogleFonts.poppins(
+                        color: isDark
+                            ? Colors.grey.shade400
+                            : Colors.grey.shade600,
+                        fontSize: 13)),
                 const SizedBox(height: 4),
                 Text(
                   subtitle,
@@ -634,10 +727,14 @@ class _Step3DocumentsState extends State<Step3Documents> {
   }
 
   Widget _buildDivider(bool isDark) {
-    return Divider(height: 1, indent: 48, color: isDark ? Colors.grey.shade800 : Colors.grey.shade200);
+    return Divider(
+        height: 1,
+        indent: 48,
+        color: isDark ? Colors.grey.shade800 : Colors.grey.shade200);
   }
 
-  Widget _buildMemberCard(FamilyMember member, Color cardColor, Color textColor, bool isDark) {
+  Widget _buildMemberCard(
+      FamilyMember member, Color cardColor, Color textColor, bool isDark) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
@@ -652,18 +749,26 @@ class _Step3DocumentsState extends State<Step3Documents> {
             backgroundColor: const Color(0xFF3E2723), // Deep brown/orange bg
             child: Text(
               member.name.isNotEmpty ? member.name[0].toUpperCase() : '?',
-              style: GoogleFonts.poppins(color: const Color(0xFFFF9F0A), fontWeight: FontWeight.bold),
+              style: GoogleFonts.poppins(
+                  color: const Color(0xFFFF9F0A), fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(width: 16),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(member.name, style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.bold, color: textColor)),
+              Text(member.name,
+                  style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: textColor)),
               const SizedBox(height: 4),
               Text(
                 "${member.age} yrs • ${member.gender} • ${member.relation}",
-                style: GoogleFonts.poppins(fontSize: 13, color: isDark ? Colors.grey.shade400 : Colors.grey.shade600),
+                style: GoogleFonts.poppins(
+                    fontSize: 13,
+                    color:
+                        isDark ? Colors.grey.shade400 : Colors.grey.shade600),
               ),
             ],
           ),

@@ -1,0 +1,50 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isNumber(value) {
+      return value is int || value is float;
+    }
+
+    function isValidSurvey(data) {
+      return data.keys().hasOnly([
+            'id',
+            'householdId',
+            'address',
+            'latitude',
+            'longitude',
+            'members',
+            'documentPaths',
+            'documentUrls',
+            'isSynced',
+            'status',
+            'timestamp',
+            'aiVerified',
+            'blockchainHash'
+          ])
+          && data.id is string
+          && data.householdId is string
+          && data.address is string
+          && isNumber(data.latitude)
+          && isNumber(data.longitude)
+          && data.members is list
+          && data.documentPaths is list
+          && data.documentUrls is list
+          && data.isSynced is bool
+          && data.status is string
+          && data.timestamp is string
+          && data.aiVerified is bool
+          && data.blockchainHash is string;
+    }
+
+    match /surveys/{surveyId} {
+      allow get, list: if isAuthenticated();
+      allow create, update: if isAuthenticated() && isValidSurvey(request.resource.data);
+      allow delete: if isAuthenticated();
+    }
+  }
+}

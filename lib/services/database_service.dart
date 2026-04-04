@@ -12,7 +12,7 @@ class DatabaseService {
     try {
       await Hive.initFlutter();
       print("DEBUG: Hive.initFlutter done");
-      
+
       // Register Adapters here (Generated adapters)
       if (!Hive.isAdapterRegistered(1)) {
         Hive.registerAdapter(FamilyMemberAdapter());
@@ -20,10 +20,10 @@ class DatabaseService {
       }
       if (!Hive.isAdapterRegistered(2)) {
         Hive.registerAdapter(SurveyModelAdapter());
-         print("DEBUG: SurveyModelAdapter registered");
+        print("DEBUG: SurveyModelAdapter registered");
       }
       // Hive.registerAdapter(UserModelAdapter()); // Uncomment when User model is ready
-      
+
       await Hive.openBox<SurveyModel>(surveyBoxName);
       await Hive.openBox<SurveyModel>(draftBoxName);
       print("DEBUG: Hive boxes opened");
@@ -39,6 +39,16 @@ class DatabaseService {
   // Save Survey (Create or Update)
   Future<void> saveSurvey(SurveyModel survey) async {
     await surveyBox.put(survey.id, survey);
+  }
+
+  // Create Survey alias
+  Future<void> addSurvey(SurveyModel survey) async {
+    await saveSurvey(survey);
+  }
+
+  // Update Survey alias
+  Future<void> updateSurvey(SurveyModel survey) async {
+    await saveSurvey(survey);
   }
 
   // Get All Surveys

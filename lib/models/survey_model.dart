@@ -4,6 +4,22 @@ import 'family_member_model.dart';
 part 'survey_model.g.dart';
 
 @HiveType(typeId: 2)
+
+/// Database schema for survey records:
+///
+/// id (String) - Unique identifier per survey record.
+/// householdId (String) - Family or household identifier.
+/// address (String) - Full address description.
+/// latitude (double) - GPS latitude coordinate.
+/// longitude (double) - GPS longitude coordinate.
+/// members (List of FamilyMember) - List of family member objects.
+/// documentPaths (List of String) - Local file paths for attached images.
+/// documentUrls (List of String) - Cloud URLs for uploaded images.
+/// isSynced (bool) - Whether the survey has been synced to remote storage.
+/// status (String) - Survey workflow status such as Draft, Pending, Auto-Verified.
+/// timestamp (DateTime) - Creation/update timestamp.
+/// aiVerified (bool) - Whether document OCR verification succeeded.
+/// blockchainHash (String) - SHA-256 hash of survey data.
 class SurveyModel {
   @HiveField(0)
   final String id;
@@ -86,8 +102,9 @@ class SurveyModel {
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
       members: (json['members'] as List<dynamic>?)
-          ?.map((e) => FamilyMember.fromJson(e))
-          .toList() ?? [],
+              ?.map((e) => FamilyMember.fromJson(e))
+              .toList() ??
+          [],
       documentPaths: List<String>.from(json['documentPaths'] ?? []),
       documentUrls: List<String>.from(json['documentUrls'] ?? []),
       isSynced: json['isSynced'] ?? true, // Assume synced if coming from cloud

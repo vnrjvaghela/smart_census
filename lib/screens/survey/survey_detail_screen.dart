@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_census/models/survey_model.dart';
-import 'package:smart_census/screens/survey/step1_household.dart';
+import 'package:smart_census/screens/survey/household_info_screen.dart';
 
 class SurveyDetailScreen extends StatelessWidget {
   final SurveyModel survey;

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_census/screens/profile/profile_screen.dart';
 import 'package:smart_census/screens/survey/survey_list_screen.dart';
-import 'package:smart_census/screens/survey/step1_household.dart';
+import 'package:smart_census/screens/survey/household_info_screen.dart';
 import 'package:smart_census/models/survey_model.dart';
 import 'package:smart_census/services/database_service.dart';
 import 'package:smart_census/services/sync_service.dart';
@@ -13,14 +13,21 @@ import 'dart:async';
 
 // The new "Home Screen" acts as a shell for the Bottom Navigation Bar.
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final int initialIndex;
+  const HomeScreen({super.key, this.initialIndex = 0});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
 
   final List<Widget> _tabs = [
     const DashboardTab(),
@@ -37,7 +44,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: _tabs[_currentIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: isDark ? Colors.grey.shade900 : Colors.grey.shade200, width: 0.5)),
+          border: Border(
+              top: BorderSide(
+                  color: isDark ? Colors.grey.shade900 : Colors.grey.shade200,
+                  width: 0.5)),
         ),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
@@ -48,22 +58,36 @@ class _HomeScreenState extends State<HomeScreen> {
           showUnselectedLabels: true,
           type: BottomNavigationBarType.fixed,
           elevation: 0,
-          selectedLabelStyle: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
-          unselectedLabelStyle: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w500),
+          selectedLabelStyle:
+              GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600),
+          unselectedLabelStyle:
+              GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w500),
           items: const [
             BottomNavigationBarItem(
-              icon: Padding(padding: EdgeInsets.only(bottom: 4), child: Icon(Icons.grid_view_rounded)),
-              activeIcon: Padding(padding: EdgeInsets.only(bottom: 4), child: Icon(Icons.grid_view_rounded)),
+              icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.grid_view_rounded)),
+              activeIcon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.grid_view_rounded)),
               label: 'Dashboard',
             ),
             BottomNavigationBarItem(
-              icon: Padding(padding: EdgeInsets.only(bottom: 4), child: Icon(Icons.assignment_outlined)),
-              activeIcon: Padding(padding: EdgeInsets.only(bottom: 4), child: Icon(Icons.assignment)),
+              icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.assignment_outlined)),
+              activeIcon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.assignment)),
               label: 'Surveys',
             ),
             BottomNavigationBarItem(
-              icon: Padding(padding: EdgeInsets.only(bottom: 4), child: Icon(Icons.person_outline_rounded)),
-              activeIcon: Padding(padding: EdgeInsets.only(bottom: 4), child: Icon(Icons.person_rounded)),
+              icon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.person_outline_rounded)),
+              activeIcon: Padding(
+                  padding: EdgeInsets.only(bottom: 4),
+                  child: Icon(Icons.person_rounded)),
               label: 'Profile',
             ),
           ],
@@ -106,7 +130,8 @@ class _DashboardTabState extends State<DashboardTab> {
     setState(() {
       _isOnline = result != ConnectivityResult.none;
     });
-    _connectivitySubscription = Connectivity().onConnectivityChanged.listen((result) {
+    _connectivitySubscription =
+        Connectivity().onConnectivityChanged.listen((result) {
       final nowOnline = result != ConnectivityResult.none;
       if (!_isOnline && nowOnline) {
         // Just came back online — auto-trigger sync
@@ -140,11 +165,11 @@ class _DashboardTabState extends State<DashboardTab> {
     }
 
     setState(() => _isSyncing = true);
-    
+
     final synced = await SyncService().uploadPendingSurveys();
-    
+
     setState(() => _isSyncing = false);
-    
+
     await _loadStats(); // Refresh stats
 
     if (mounted) {
@@ -191,11 +216,15 @@ class _DashboardTabState extends State<DashboardTab> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.wifi_off_rounded, color: Colors.white, size: 16),
+                        const Icon(Icons.wifi_off_rounded,
+                            color: Colors.white, size: 16),
                         const SizedBox(width: 8),
                         Text(
                           'Offline — surveys will sync when connected',
-                          style: GoogleFonts.inter(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w600),
+                          style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
@@ -216,13 +245,15 @@ class _DashboardTabState extends State<DashboardTab> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      boxShadow: isDark ? [] : [
-                        BoxShadow(
-                          color: const Color(0xFF007AFF).withOpacity(0.3),
-                          blurRadius: 12,
-                          offset: const Offset(0, 6),
-                        ),
-                      ],
+                      boxShadow: isDark
+                          ? []
+                          : [
+                              BoxShadow(
+                                color: const Color(0xFF007AFF).withOpacity(0.3),
+                                blurRadius: 12,
+                                offset: const Offset(0, 6),
+                              ),
+                            ],
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(20.0),
@@ -234,7 +265,8 @@ class _DashboardTabState extends State<DashboardTab> {
                               color: Colors.white.withOpacity(0.2),
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(Icons.person, size: 28, color: Colors.white),
+                            child: const Icon(Icons.person,
+                                size: 28, color: Colors.white),
                           ),
                           const SizedBox(width: 16),
                           Column(
@@ -242,11 +274,18 @@ class _DashboardTabState extends State<DashboardTab> {
                             children: [
                               Text(
                                 'Welcome back!',
-                                style: GoogleFonts.inter(fontSize: 14, color: Colors.white70, fontWeight: FontWeight.w500),
+                                style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: Colors.white70,
+                                    fontWeight: FontWeight.w500),
                               ),
                               Text(
                                 phoneNumber,
-                                style: GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white, letterSpacing: 0.5),
+                                style: GoogleFonts.inter(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    letterSpacing: 0.5),
                               ),
                             ],
                           ),
@@ -265,16 +304,31 @@ class _DashboardTabState extends State<DashboardTab> {
                   // Stats Row
                   Row(
                     children: [
-                      Expanded(child: _buildStatCard("Total", _totalCount.toString(), theme.colorScheme.primary, isDark, theme.cardTheme.color!)),
+                      Expanded(
+                          child: _buildStatCard(
+                              "Total",
+                              _totalCount.toString(),
+                              theme.colorScheme.primary,
+                              isDark,
+                              theme.cardTheme.color!)),
                       const SizedBox(width: 12),
-                      Expanded(child: _buildStatCard("Pending", _pendingCount.toString(), Colors.orange, isDark, theme.cardTheme.color!)),
+                      Expanded(
+                          child: _buildStatCard(
+                              "Pending",
+                              _pendingCount.toString(),
+                              Colors.orange,
+                              isDark,
+                              theme.cardTheme.color!)),
                     ],
                   ),
                   const SizedBox(height: 24),
 
                   Text(
                     "Sync Actions",
-                    style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: theme.colorScheme.onSurface),
+                    style: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface),
                   ),
                   const SizedBox(height: 12),
 
@@ -282,35 +336,56 @@ class _DashboardTabState extends State<DashboardTab> {
                     onTap: _isSyncing ? null : _triggerSync,
                     borderRadius: BorderRadius.circular(16),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 16),
                       decoration: BoxDecoration(
                         color: _pendingCount > 0
-                            ? (isDark ? Colors.orange.withOpacity(0.1) : const Color(0xFFFFF3E0))
-                            : (isDark ? Colors.green.withOpacity(0.1) : const Color(0xFFE8F5E9)),
+                            ? (isDark
+                                ? Colors.orange.withOpacity(0.1)
+                                : const Color(0xFFFFF3E0))
+                            : (isDark
+                                ? Colors.green.withOpacity(0.1)
+                                : const Color(0xFFE8F5E9)),
                         borderRadius: BorderRadius.circular(16),
                         border: Border.all(
                           color: _pendingCount > 0
-                              ? (isDark ? Colors.orange.withOpacity(0.3) : const Color(0xFFFFB74D))
-                              : (isDark ? Colors.green.withOpacity(0.3) : const Color(0xFFA5D6A7)),
+                              ? (isDark
+                                  ? Colors.orange.withOpacity(0.3)
+                                  : const Color(0xFFFFB74D))
+                              : (isDark
+                                  ? Colors.green.withOpacity(0.3)
+                                  : const Color(0xFFA5D6A7)),
                         ),
                       ),
                       child: Row(
                         children: [
                           _isSyncing
-                              ? const SizedBox(width: 24, height: 24, child: CircularProgressIndicator(strokeWidth: 2))
+                              ? const SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child:
+                                      CircularProgressIndicator(strokeWidth: 2))
                               : Icon(
-                                  _pendingCount > 0 ? Icons.sync_problem_rounded : Icons.check_circle_rounded,
-                                  color: _pendingCount > 0 ? const Color(0xFFFF6F00) : const Color(0xFF2E7D32),
+                                  _pendingCount > 0
+                                      ? Icons.sync_problem_rounded
+                                      : Icons.check_circle_rounded,
+                                  color: _pendingCount > 0
+                                      ? const Color(0xFFFF6F00)
+                                      : const Color(0xFF2E7D32),
                                 ),
                           const SizedBox(width: 16),
                           Text(
                             _isSyncing
                                 ? "Syncing data..."
-                                : (_pendingCount > 0 ? "Sync Now ($_pendingCount pending)" : "All data synced"),
+                                : (_pendingCount > 0
+                                    ? "Sync Now ($_pendingCount pending)"
+                                    : "All data synced"),
                             style: GoogleFonts.inter(
                               fontWeight: FontWeight.w600,
                               fontSize: 15,
-                              color: _pendingCount > 0 ? const Color(0xFFE65100) : const Color(0xFF1B5E20),
+                              color: _pendingCount > 0
+                                  ? const Color(0xFFE65100)
+                                  : const Color(0xFF1B5E20),
                             ),
                           ),
                         ],
@@ -321,7 +396,10 @@ class _DashboardTabState extends State<DashboardTab> {
 
                   Text(
                     "Recent Surveys",
-                    style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.bold, color: theme.colorScheme.onSurface),
+                    style: GoogleFonts.inter(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: theme.colorScheme.onSurface),
                   ),
                   const SizedBox(height: 12),
                   _buildRecentSurveysList(isDark, theme),
@@ -330,8 +408,8 @@ class _DashboardTabState extends State<DashboardTab> {
               ),
             ),
           ), // Expanded
-        ],    // body Column children
-      ),      // body Column
+        ], // body Column children
+      ), // body Column
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
           await Navigator.push(
@@ -341,7 +419,8 @@ class _DashboardTabState extends State<DashboardTab> {
           _loadStats(); // Refresh after returning from survey
         },
         elevation: 4,
-        label: Text("New Survey", style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+        label: Text("New Survey",
+            style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
         icon: const Icon(Icons.add_rounded),
         backgroundColor: theme.colorScheme.primary,
         foregroundColor: Colors.white,
@@ -360,7 +439,9 @@ class _DashboardTabState extends State<DashboardTab> {
           borderRadius: BorderRadius.circular(16),
           border: isDark ? null : Border.all(color: Colors.grey.shade200),
         ),
-        child: Text("Tap 'New Survey' to get started.", style: GoogleFonts.inter(color: Colors.grey.shade500, fontSize: 14)),
+        child: Text("Tap 'New Survey' to get started.",
+            style:
+                GoogleFonts.inter(color: Colors.grey.shade500, fontSize: 14)),
       );
     }
 
@@ -373,24 +454,38 @@ class _DashboardTabState extends State<DashboardTab> {
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
           child: ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             leading: CircleAvatar(
-              backgroundColor: survey.isSynced 
-                  ? (isDark ? Colors.green.withOpacity(0.2) : Colors.green.shade50) 
-                  : (isDark ? Colors.orange.withOpacity(0.2) : Colors.orange.shade50),
+              backgroundColor: survey.isSynced
+                  ? (isDark
+                      ? Colors.green.withOpacity(0.2)
+                      : Colors.green.shade50)
+                  : (isDark
+                      ? Colors.orange.withOpacity(0.2)
+                      : Colors.orange.shade50),
               child: Icon(
                 survey.isSynced ? Icons.cloud_done : Icons.cloud_upload,
                 color: survey.isSynced ? Colors.green : Colors.orange,
               ),
             ),
-            title: Text(survey.householdId, style: GoogleFonts.inter(fontWeight: FontWeight.bold, color: theme.colorScheme.onSurface)),
-            subtitle: Text("${survey.members.length} members • ${survey.status}", style: GoogleFonts.inter(color: isDark ? Colors.grey.shade400 : Colors.grey.shade600)),
-            trailing: Icon(Icons.chevron_right, color: isDark ? Colors.grey.shade600 : Colors.grey.shade400),
+            title: Text(survey.householdId,
+                style: GoogleFonts.inter(
+                    fontWeight: FontWeight.bold,
+                    color: theme.colorScheme.onSurface)),
+            subtitle: Text(
+                "${survey.members.length} members • ${survey.status}",
+                style: GoogleFonts.inter(
+                    color:
+                        isDark ? Colors.grey.shade400 : Colors.grey.shade600)),
+            trailing: Icon(Icons.chevron_right,
+                color: isDark ? Colors.grey.shade600 : Colors.grey.shade400),
             onTap: () {
-               Navigator.push(
-                 context,
-                 MaterialPageRoute(builder: (context) => SurveyDetailScreen(survey: survey)),
-               );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SurveyDetailScreen(survey: survey)),
+              );
             },
           ),
         );
@@ -402,7 +497,9 @@ class _DashboardTabState extends State<DashboardTab> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? theme.colorScheme.primary.withOpacity(0.1) : const Color(0xFFF0F7FF),
+        color: isDark
+            ? theme.colorScheme.primary.withOpacity(0.1)
+            : const Color(0xFFF0F7FF),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: theme.colorScheme.primary.withOpacity(0.3)),
       ),
@@ -414,7 +511,8 @@ class _DashboardTabState extends State<DashboardTab> {
               color: theme.colorScheme.primary.withOpacity(0.2),
               shape: BoxShape.circle,
             ),
-            child: Icon(Icons.edit_note_rounded, color: theme.colorScheme.primary),
+            child:
+                Icon(Icons.edit_note_rounded, color: theme.colorScheme.primary),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -423,11 +521,17 @@ class _DashboardTabState extends State<DashboardTab> {
               children: [
                 Text(
                   "Unfinished Survey",
-                  style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16, color: theme.colorScheme.primary),
+                  style: GoogleFonts.inter(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: theme.colorScheme.primary),
                 ),
                 Text(
                   "Household: ${_activeDraft!.householdId}",
-                  style: GoogleFonts.inter(fontSize: 13, color: isDark ? Colors.grey.shade400 : Colors.grey.shade600),
+                  style: GoogleFonts.inter(
+                      fontSize: 13,
+                      color:
+                          isDark ? Colors.grey.shade400 : Colors.grey.shade600),
                 ),
               ],
             ),
@@ -437,14 +541,16 @@ class _DashboardTabState extends State<DashboardTab> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => Step1Household(existingSurvey: _activeDraft),
+                  builder: (context) =>
+                      Step1Household(existingSurvey: _activeDraft),
                 ),
               ).then((_) => _loadStats());
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: theme.colorScheme.primary,
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
               padding: const EdgeInsets.symmetric(horizontal: 16),
             ),
             child: const Text("Resume"),
@@ -457,10 +563,16 @@ class _DashboardTabState extends State<DashboardTab> {
                 context: context,
                 builder: (ctx) => AlertDialog(
                   title: const Text("Discard Draft?"),
-                  content: const Text("This will permanently delete your unfinished survey data."),
+                  content: const Text(
+                      "This will permanently delete your unfinished survey data."),
                   actions: [
-                    TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text("Cancel")),
-                    TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text("Discard", style: TextStyle(color: Colors.red))),
+                    TextButton(
+                        onPressed: () => Navigator.pop(ctx, false),
+                        child: const Text("Cancel")),
+                    TextButton(
+                        onPressed: () => Navigator.pop(ctx, true),
+                        child: const Text("Discard",
+                            style: TextStyle(color: Colors.red))),
                   ],
                 ),
               );
@@ -475,27 +587,35 @@ class _DashboardTabState extends State<DashboardTab> {
     );
   }
 
-  Widget _buildStatCard(String label, String count, Color color, bool isDark, Color cardColor) {
+  Widget _buildStatCard(
+      String label, String count, Color color, bool isDark, Color cardColor) {
     return Container(
       decoration: BoxDecoration(
         color: cardColor,
         borderRadius: BorderRadius.circular(16),
         border: isDark ? null : Border.all(color: Colors.grey.shade200),
-        boxShadow: isDark ? [] : [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.02),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: isDark
+            ? []
+            : [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.02),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: Column(
           children: [
-            Text(count, style: GoogleFonts.inter(fontSize: 32, fontWeight: FontWeight.bold, color: color)),
+            Text(count,
+                style: GoogleFonts.inter(
+                    fontSize: 32, fontWeight: FontWeight.bold, color: color)),
             const SizedBox(height: 4),
-            Text(label, style: GoogleFonts.inter(color: isDark ? Colors.grey.shade400 : Colors.grey.shade600, fontWeight: FontWeight.w500)),
+            Text(label,
+                style: GoogleFonts.inter(
+                    color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                    fontWeight: FontWeight.w500)),
           ],
         ),
       ),
