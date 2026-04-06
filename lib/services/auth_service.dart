@@ -28,7 +28,8 @@ class AuthService {
   }
 
   // Sign in with Credential
-  Future<UserCredential?> signInWithCredential(PhoneAuthCredential credential) async {
+  Future<UserCredential?> signInWithCredential(
+      PhoneAuthCredential credential) async {
     try {
       return await _auth.signInWithCredential(credential);
     } catch (e) {

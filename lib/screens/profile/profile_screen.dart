@@ -49,7 +49,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _editName() async {
-    final controller = TextEditingController(text: _surveyorName == "Not set" ? "" : _surveyorName);
+    final controller = TextEditingController(
+        text: _surveyorName == "Not set" ? "" : _surveyorName);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -57,7 +58,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: theme.cardTheme.color,
-        title: Text('Edit Name', style: GoogleFonts.inter(color: theme.colorScheme.onSurface, fontWeight: FontWeight.bold)),
+        title: Text('Edit Name',
+            style: GoogleFonts.inter(
+                color: theme.colorScheme.onSurface,
+                fontWeight: FontWeight.bold)),
         content: TextField(
           controller: controller,
           decoration: const InputDecoration(hintText: "Enter your name"),
@@ -67,7 +71,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: TextStyle(color: isDark ? Colors.grey : Colors.black54)),
+            child: Text('Cancel',
+                style: TextStyle(color: isDark ? Colors.grey : Colors.black54)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, controller.text.trim()),
@@ -108,10 +113,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       print("DEBUG: Firebase not initialized (Test Mode active)");
     }
     final phoneNumber = user?.phoneNumber ?? "+91 9999999999";
-    
+
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    
+
     final cardColor = theme.cardTheme.color;
     final textColor = theme.colorScheme.onSurface;
     final subtitleColor = isDark ? Colors.grey.shade400 : Colors.grey.shade600;
@@ -133,24 +138,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       CircleAvatar(
                         radius: 45,
-                        backgroundColor: isDark ? const Color(0xFF2C2C2E) : Colors.blue.shade50,
-                        child: Icon(Icons.person_outline, size: 45, color: theme.colorScheme.primary),
+                        backgroundColor: isDark
+                            ? const Color(0xFF2C2C2E)
+                            : Colors.blue.shade50,
+                        child: Icon(Icons.person_outline,
+                            size: 45, color: theme.colorScheme.primary),
                       ),
                       Positioned(
                         bottom: 0,
                         right: 0,
                         child: GestureDetector(
                           onTap: () {
-                             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Profile picture upload coming soon")));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        "Profile picture upload coming soon")));
                           },
                           child: Container(
                             decoration: BoxDecoration(
                               color: theme.colorScheme.primary,
                               shape: BoxShape.circle,
-                              border: Border.all(color: theme.scaffoldBackgroundColor, width: 3),
+                              border: Border.all(
+                                  color: theme.scaffoldBackgroundColor,
+                                  width: 3),
                             ),
                             padding: const EdgeInsets.all(6),
-                            child: const Icon(Icons.camera_alt, color: Colors.white, size: 16),
+                            child: const Icon(Icons.camera_alt,
+                                color: Colors.white, size: 16),
                           ),
                         ),
                       )
@@ -162,30 +176,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Text(
                         phoneNumber,
-                        style: GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.bold, color: textColor),
+                        style: GoogleFonts.inter(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: textColor),
                       ),
                       const SizedBox(width: 8),
                       GestureDetector(
                         onTap: () {}, // Future link to account settings
-                        child: Icon(Icons.edit_outlined, size: 18, color: subtitleColor),
+                        child: Icon(Icons.edit_outlined,
+                            size: 18, color: subtitleColor),
                       ),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                     decoration: BoxDecoration(
-                      color: isDark ? const Color(0xFF1E3A5F) : Colors.blue.shade50,
+                      color: isDark
+                          ? const Color(0xFF1E3A5F)
+                          : Colors.blue.shade50,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.verified, size: 14, color: theme.colorScheme.primary),
+                        Icon(Icons.verified,
+                            size: 14, color: theme.colorScheme.primary),
                         const SizedBox(width: 4),
                         Text(
                           "Census Surveyor",
-                          style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: theme.colorScheme.primary),
+                          style: GoogleFonts.inter(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: theme.colorScheme.primary),
                         ),
                       ],
                     ),
@@ -204,19 +229,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Row(
                 children: [
-                  _buildStatItem("Surveys", _totalSurveys.toString(), textColor, subtitleColor),
+                  _buildStatItem("Surveys", _totalSurveys.toString(), textColor,
+                      subtitleColor),
                   _buildDivider(isDark),
-                  _buildStatItem("Synced", _syncedSurveys.toString(), textColor, subtitleColor),
+                  _buildStatItem("Synced", _syncedSurveys.toString(), textColor,
+                      subtitleColor),
                   _buildDivider(isDark),
-                  _buildStatItem("Pending", _pendingSurveys.toString(), textColor, subtitleColor),
+                  _buildStatItem("Pending", _pendingSurveys.toString(),
+                      textColor, subtitleColor),
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 24),
             _buildSectionHeader("APPEARANCE", subtitleColor),
             const SizedBox(height: 8),
-            _buildThemeSelector(context, cardColor ?? (isDark ? const Color(0xFF1E1E1E) : Colors.white), textColor),
+            _buildThemeSelector(
+                context,
+                cardColor ?? (isDark ? const Color(0xFF1E1E1E) : Colors.white),
+                textColor),
 
             const SizedBox(height: 24),
             _buildSectionHeader("ACCOUNT", subtitleColor),
@@ -228,13 +259,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               child: Column(
                 children: [
-                  _buildListTile(Icons.person_outline, "Surveyor Name", _surveyorName, isDark, textColor, subtitleColor, onTap: _editName),
+                  _buildListTile(Icons.person_outline, "Surveyor Name",
+                      _surveyorName, isDark, textColor, subtitleColor,
+                      onTap: _editName),
                   const Divider(height: 1, indent: 56),
-                  _buildListTile(Icons.phone_outlined, "Phone Number", phoneNumber, isDark, textColor, subtitleColor),
+                  _buildListTile(Icons.phone_outlined, "Phone Number",
+                      phoneNumber, isDark, textColor, subtitleColor),
                   const Divider(height: 1, indent: 56),
-                  _buildListTile(Icons.assignment_ind_outlined, "Role", "Surveyor", isDark, textColor, subtitleColor),
+                  _buildListTile(Icons.assignment_ind_outlined, "Role",
+                      "Surveyor", isDark, textColor, subtitleColor),
                   const Divider(height: 1, indent: 56),
-                  _buildListTile(Icons.location_on_outlined, "Assigned Area", "Delhi (Ward 05)", isDark, textColor, subtitleColor),
+                  _buildListTile(Icons.location_on_outlined, "Assigned Area",
+                      "Delhi (Ward 05)", isDark, textColor, subtitleColor),
                 ],
               ),
             ),
@@ -249,9 +285,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               child: Column(
                 children: [
-                  _buildListTile(Icons.help_outline, "Help & Support", "", isDark, textColor, subtitleColor, showChevron: true),
+                  _buildListTile(Icons.help_outline, "Help & Support", "",
+                      isDark, textColor, subtitleColor,
+                      showChevron: true),
                   const Divider(height: 1, indent: 56),
-                  _buildListTile(Icons.logout, "Log Out", "", isDark, Colors.red, Colors.red, onTap: () => _signOut(context)),
+                  _buildListTile(Icons.logout, "Log Out", "", isDark,
+                      Colors.red, Colors.red,
+                      onTap: () => _signOut(context)),
                 ],
               ),
             ),
@@ -267,18 +307,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: const EdgeInsets.only(left: 16.0),
       child: Text(
         title,
-        style: GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, color: color, letterSpacing: 1.2),
+        style: GoogleFonts.inter(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: color,
+            letterSpacing: 1.2),
       ),
     );
   }
 
-  Widget _buildStatItem(String label, String value, Color textColor, Color subtitleColor) {
+  Widget _buildStatItem(
+      String label, String value, Color textColor, Color subtitleColor) {
     return Expanded(
       child: Column(
         children: [
-          Text(value, style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold, color: textColor)),
+          Text(value,
+              style: GoogleFonts.inter(
+                  fontSize: 20, fontWeight: FontWeight.bold, color: textColor)),
           const SizedBox(height: 4),
-          Text(label, style: GoogleFonts.inter(fontSize: 12, color: subtitleColor)),
+          Text(label,
+              style: GoogleFonts.inter(fontSize: 12, color: subtitleColor)),
         ],
       ),
     );
@@ -292,18 +340,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildListTile(IconData icon, String title, String subtitle, bool isDark, Color titleColor, Color subtitleColor, {VoidCallback? onTap, bool showChevron = false}) {
+  Widget _buildListTile(IconData icon, String title, String subtitle,
+      bool isDark, Color titleColor, Color subtitleColor,
+      {VoidCallback? onTap, bool showChevron = false}) {
     return ListTile(
       onTap: onTap,
       leading: Icon(icon, color: subtitleColor, size: 22),
-      title: Text(title, style: GoogleFonts.inter(fontSize: 12, color: subtitleColor)),
-      subtitle: subtitle.isNotEmpty ? Text(subtitle, style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w600, color: titleColor)) : null,
-      trailing: showChevron ? Icon(Icons.chevron_right, color: subtitleColor) : null,
+      title: Text(title,
+          style: GoogleFonts.inter(fontSize: 12, color: subtitleColor)),
+      subtitle: subtitle.isNotEmpty
+          ? Text(subtitle,
+              style: GoogleFonts.inter(
+                  fontSize: 16, fontWeight: FontWeight.w600, color: titleColor))
+          : null,
+      trailing:
+          showChevron ? Icon(Icons.chevron_right, color: subtitleColor) : null,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
     );
   }
 
-  Widget _buildThemeSelector(BuildContext context, Color cardColor, Color textColor) {
+  Widget _buildThemeSelector(
+      BuildContext context, Color cardColor, Color textColor) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -315,15 +372,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       child: Row(
         children: [
-          _buildThemeOption("Light", Icons.light_mode_outlined, ThemeMode.light, themeProvider, isDark, textColor),
-          _buildThemeOption("Dark", Icons.dark_mode_outlined, ThemeMode.dark, themeProvider, isDark, textColor),
-          _buildThemeOption("System", Icons.phone_android_outlined, ThemeMode.system, themeProvider, isDark, textColor),
+          _buildThemeOption("Light", Icons.light_mode_outlined, ThemeMode.light,
+              themeProvider, isDark, textColor),
+          _buildThemeOption("Dark", Icons.dark_mode_outlined, ThemeMode.dark,
+              themeProvider, isDark, textColor),
+          _buildThemeOption("System", Icons.phone_android_outlined,
+              ThemeMode.system, themeProvider, isDark, textColor),
         ],
       ),
     );
   }
 
-  Widget _buildThemeOption(String label, IconData icon, ThemeMode mode, ThemeProvider provider, bool isDark, Color textColor) {
+  Widget _buildThemeOption(String label, IconData icon, ThemeMode mode,
+      ThemeProvider provider, bool isDark, Color textColor) {
     final isSelected = provider.themeMode == mode;
     final primaryColor = Theme.of(context).colorScheme.primary;
 
@@ -333,14 +394,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12),
           decoration: BoxDecoration(
-            color: isSelected ? (isDark ? primaryColor.withOpacity(0.2) : Colors.white) : Colors.transparent,
+            color: isSelected
+                ? (isDark ? primaryColor.withOpacity(0.2) : Colors.white)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(8),
-            boxShadow: isSelected && !isDark ? [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4, offset: const Offset(0, 2))] : null,
+            boxShadow: isSelected && !isDark
+                ? [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2))
+                  ]
+                : null,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 16, color: isSelected ? primaryColor : Colors.grey),
+              Icon(icon,
+                  size: 16, color: isSelected ? primaryColor : Colors.grey),
               const SizedBox(width: 8),
               Text(
                 label,

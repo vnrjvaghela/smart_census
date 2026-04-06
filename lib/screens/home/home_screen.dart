@@ -10,6 +10,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smart_census/screens/survey/survey_detail_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:async';
+import 'package:smart_census/screens/ai/ocr_screen.dart';
+import 'package:smart_census/screens/api/api_screen.dart';
+import 'package:smart_census/screens/notifications/notification_screen.dart';
 
 // The new "Home Screen" acts as a shell for the Bottom Navigation Bar.
 class HomeScreen extends StatefulWidget {
@@ -41,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
+      drawer: _buildDrawer(context),
       body: _tabs[_currentIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -92,6 +96,54 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildDrawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration:
+                BoxDecoration(color: Theme.of(context).colorScheme.primary),
+            child: Text('Lab Features',
+                style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold)),
+          ),
+          ListTile(
+            leading: const Icon(Icons.camera_alt),
+            title: Text('LAB 11 - OCR', style: GoogleFonts.inter()),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const OcrScreen()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.api),
+            title: Text('LAB 9 - API', style: GoogleFonts.inter()),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const ApiScreen()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.notifications),
+            title: Text('LAB 10 - Notifications', style: GoogleFonts.inter()),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const NotificationScreen()));
+            },
+          ),
+        ],
       ),
     );
   }

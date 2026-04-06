@@ -25,7 +25,9 @@ class SurveyDetailScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => Step1Household(existingSurvey: survey)),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          Step1Household(existingSurvey: survey)),
                 );
               },
             ),
@@ -41,7 +43,9 @@ class SurveyDetailScreen extends StatelessWidget {
               children: [
                 // Sync Status Chip
                 _buildStatusChip(
-                  icon: survey.isSynced ? Icons.cloud_done_rounded : Icons.cloud_upload_outlined,
+                  icon: survey.isSynced
+                      ? Icons.cloud_done_rounded
+                      : Icons.cloud_upload_outlined,
                   label: survey.isSynced ? 'Synced' : 'Pending Upload',
                   color: survey.isSynced ? Colors.green : Colors.orange,
                   isDark: isDark,
@@ -49,7 +53,9 @@ class SurveyDetailScreen extends StatelessWidget {
                 const SizedBox(width: 8),
                 // AI Verified Chip
                 _buildStatusChip(
-                  icon: survey.aiVerified ? Icons.verified_rounded : Icons.shield_outlined,
+                  icon: survey.aiVerified
+                      ? Icons.verified_rounded
+                      : Icons.shield_outlined,
                   label: survey.aiVerified ? 'AI Verified' : 'Not Verified',
                   color: survey.aiVerified ? Colors.blue : Colors.grey,
                   isDark: isDark,
@@ -65,20 +71,25 @@ class SurveyDetailScreen extends StatelessWidget {
               isDark: isDark,
               child: Column(
                 children: [
-                  _buildInfoRow(Icons.home_outlined, 'Address', survey.address, isDark),
+                  _buildInfoRow(
+                      Icons.home_outlined, 'Address', survey.address, isDark),
                   _buildDivider(isDark),
-                  _buildInfoRow(Icons.location_on_outlined, 'GPS', '${survey.latitude}, ${survey.longitude}', isDark),
+                  _buildInfoRow(Icons.location_on_outlined, 'GPS',
+                      '${survey.latitude}, ${survey.longitude}', isDark),
                   _buildDivider(isDark),
-                  _buildInfoRow(Icons.access_time_rounded, 'Created', survey.timestamp.toString().split('.')[0], isDark),
+                  _buildInfoRow(Icons.access_time_rounded, 'Created',
+                      survey.timestamp.toString().split('.')[0], isDark),
                   _buildDivider(isDark),
-                  _buildInfoRow(Icons.info_outline_rounded, 'Status', survey.status, isDark),
+                  _buildInfoRow(Icons.info_outline_rounded, 'Status',
+                      survey.status, isDark),
                 ],
               ),
             ),
             const SizedBox(height: 24),
 
             // Family Members
-            _buildSectionTitle('Family Members (${survey.members.length})', theme),
+            _buildSectionTitle(
+                'Family Members (${survey.members.length})', theme),
             const SizedBox(height: 8),
             _buildCard(
               isDark: isDark,
@@ -91,16 +102,21 @@ class SurveyDetailScreen extends StatelessWidget {
                   final member = survey.members[index];
                   return ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: theme.colorScheme.primary.withOpacity(0.15),
+                      backgroundColor:
+                          theme.colorScheme.primary.withOpacity(0.15),
                       child: Text(
-                        member.name.isNotEmpty ? member.name[0].toUpperCase() : '?',
+                        member.name.isNotEmpty
+                            ? member.name[0].toUpperCase()
+                            : '?',
                         style: GoogleFonts.poppins(
                           color: theme.colorScheme.primary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    title: Text(member.name, style: GoogleFonts.poppins(fontWeight: FontWeight.bold)),
+                    title: Text(member.name,
+                        style:
+                            GoogleFonts.poppins(fontWeight: FontWeight.bold)),
                     subtitle: Text(
                       '${member.relation} • ${member.age} yrs • ${member.gender}',
                       style: GoogleFonts.poppins(fontSize: 13),
@@ -112,7 +128,8 @@ class SurveyDetailScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             // Documents
-            _buildSectionTitle('Documents (${survey.documentPaths.length})', theme),
+            _buildSectionTitle(
+                'Documents (${survey.documentPaths.length})', theme),
             const SizedBox(height: 8),
             if (survey.documentPaths.isEmpty)
               _buildCard(
@@ -120,7 +137,8 @@ class SurveyDetailScreen extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Center(
-                    child: Text('No documents attached', style: GoogleFonts.poppins(color: Colors.grey)),
+                    child: Text('No documents attached',
+                        style: GoogleFonts.poppins(color: Colors.grey)),
                   ),
                 ),
               )
@@ -145,10 +163,13 @@ class SurveyDetailScreen extends StatelessWidget {
                             width: 120,
                             height: 130,
                             decoration: BoxDecoration(
-                              color: isDark ? const Color(0xFF2C2C2E) : Colors.grey.shade100,
+                              color: isDark
+                                  ? const Color(0xFF2C2C2E)
+                                  : Colors.grey.shade100,
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: const Icon(Icons.insert_drive_file, size: 36, color: Colors.grey),
+                            child: const Icon(Icons.insert_drive_file,
+                                size: 36, color: Colors.grey),
                           ),
                         ),
                       ),
@@ -165,10 +186,14 @@ class SurveyDetailScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: isDark ? const Color(0xFF1C1C1E) : const Color(0xFFFFF8E1),
+                  color: isDark
+                      ? const Color(0xFF1C1C1E)
+                      : const Color(0xFFFFF8E1),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: isDark ? Colors.orange.withOpacity(0.3) : const Color(0xFFFFCC02),
+                    color: isDark
+                        ? Colors.orange.withOpacity(0.3)
+                        : const Color(0xFFFFCC02),
                   ),
                 ),
                 child: Column(
@@ -176,7 +201,8 @@ class SurveyDetailScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.fingerprint, color: Color(0xFFFF9F0A), size: 20),
+                        const Icon(Icons.fingerprint,
+                            color: Color(0xFFFF9F0A), size: 20),
                         const SizedBox(width: 8),
                         Text(
                           'SHA-256 Hash',
@@ -190,7 +216,8 @@ class SurveyDetailScreen extends StatelessWidget {
                         // Copy button
                         GestureDetector(
                           onTap: () {
-                            Clipboard.setData(ClipboardData(text: survey.blockchainHash));
+                            Clipboard.setData(
+                                ClipboardData(text: survey.blockchainHash));
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                 content: Text('Hash copied to clipboard'),
@@ -199,7 +226,8 @@ class SurveyDetailScreen extends StatelessWidget {
                             );
                           },
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 4),
                             decoration: BoxDecoration(
                               color: const Color(0xFFFF9F0A).withOpacity(0.15),
                               borderRadius: BorderRadius.circular(8),
@@ -207,7 +235,8 @@ class SurveyDetailScreen extends StatelessWidget {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(Icons.copy_rounded, size: 14, color: Color(0xFFFF9F0A)),
+                                const Icon(Icons.copy_rounded,
+                                    size: 14, color: Color(0xFFFF9F0A)),
                                 const SizedBox(width: 4),
                                 Text(
                                   'Copy',
@@ -229,13 +258,18 @@ class SurveyDetailScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: isDark ? const Color(0xFF0A0A0A) : Colors.white,
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: isDark ? Colors.grey.shade800 : Colors.grey.shade200),
+                        border: Border.all(
+                            color: isDark
+                                ? Colors.grey.shade800
+                                : Colors.grey.shade200),
                       ),
                       child: Text(
                         survey.blockchainHash,
                         style: GoogleFonts.robotoMono(
                           fontSize: 11,
-                          color: isDark ? Colors.green.shade300 : Colors.green.shade700,
+                          color: isDark
+                              ? Colors.green.shade300
+                              : Colors.green.shade700,
                           letterSpacing: 0.5,
                         ),
                       ),
@@ -245,7 +279,9 @@ class SurveyDetailScreen extends StatelessWidget {
                       'This hash uniquely identifies this survey record. Any tampering with the data will change this value.',
                       style: GoogleFonts.poppins(
                         fontSize: 12,
-                        color: isDark ? Colors.grey.shade500 : Colors.grey.shade600,
+                        color: isDark
+                            ? Colors.grey.shade500
+                            : Colors.grey.shade600,
                       ),
                     ),
                   ],
@@ -301,7 +337,8 @@ class SurveyDetailScreen extends StatelessWidget {
           const SizedBox(width: 6),
           Text(
             label,
-            style: GoogleFonts.poppins(fontSize: 13, fontWeight: FontWeight.w600, color: color),
+            style: GoogleFonts.poppins(
+                fontSize: 13, fontWeight: FontWeight.w600, color: color),
           ),
         ],
       ),
@@ -318,7 +355,9 @@ class SurveyDetailScreen extends StatelessWidget {
           const SizedBox(width: 12),
           SizedBox(
             width: 72,
-            child: Text(label, style: GoogleFonts.poppins(color: Colors.grey.shade500, fontSize: 13)),
+            child: Text(label,
+                style: GoogleFonts.poppins(
+                    color: Colors.grey.shade500, fontSize: 13)),
           ),
           Expanded(
             child: Text(
@@ -335,6 +374,10 @@ class SurveyDetailScreen extends StatelessWidget {
   }
 
   Widget _buildDivider(bool isDark) {
-    return Divider(height: 1, indent: 16, endIndent: 16, color: isDark ? Colors.grey.shade800 : Colors.grey.shade200);
+    return Divider(
+        height: 1,
+        indent: 16,
+        endIndent: 16,
+        color: isDark ? Colors.grey.shade800 : Colors.grey.shade200);
   }
 }

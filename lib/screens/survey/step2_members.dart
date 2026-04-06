@@ -73,7 +73,8 @@ class _Step2MembersState extends State<Step2Members> {
                   ),
                   DropdownButtonFormField<String>(
                     initialValue: relation,
-                    decoration: const InputDecoration(labelText: 'Relation to Head'),
+                    decoration:
+                        const InputDecoration(labelText: 'Relation to Head'),
                     items: ['Head', 'Spouse', 'Child', 'Parent', 'Other']
                         .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                         .toList(),
@@ -130,17 +131,17 @@ class _Step2MembersState extends State<Step2Members> {
 
     // Create Survey Object (Draft Save Logic here)
     // Normally proceed to Documents, but for end of Step 2 logic:
-    
+
     Navigator.push(
-      context, 
-      MaterialPageRoute(builder: (_) => Step3Documents(
-        householdId: widget.householdId,
-        address: widget.address,
-        gpsLocation: widget.gpsLocation,
-        members: _members,
-        existingSurvey: widget.existingSurvey,
-      ))
-    );
+        context,
+        MaterialPageRoute(
+            builder: (_) => Step3Documents(
+                  householdId: widget.householdId,
+                  address: widget.address,
+                  gpsLocation: widget.gpsLocation,
+                  members: _members,
+                  existingSurvey: widget.existingSurvey,
+                )));
   }
 
   @override
@@ -183,10 +184,12 @@ class _Step2MembersState extends State<Step2Members> {
                     itemBuilder: (context, index) {
                       final member = _members[index];
                       return Card(
-                        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
                         child: ListTile(
                           leading: CircleAvatar(child: Text(member.name[0])),
-                          title: Text("${member.name} (${member.age}, ${member.gender})"),
+                          title: Text(
+                              "${member.name} (${member.age}, ${member.gender})"),
                           subtitle: Text(member.relation),
                           trailing: IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
@@ -210,7 +213,8 @@ class _Step2MembersState extends State<Step2Members> {
                   onPressed: _showAddMemberDialog,
                   icon: const Icon(Icons.person_add),
                   label: const Text("Add Family Member"),
-                  style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
+                  style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16)),
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(

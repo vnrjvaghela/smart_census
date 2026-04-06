@@ -50,7 +50,8 @@ class _SplashScreenState extends State<SplashScreen>
       CurvedAnimation(parent: _textController, curve: Curves.easeOut),
     );
     _textSlide = Tween<Offset>(begin: const Offset(0, 0.35), end: Offset.zero)
-        .animate(CurvedAnimation(parent: _textController, curve: Curves.easeOut));
+        .animate(
+            CurvedAnimation(parent: _textController, curve: Curves.easeOut));
 
     // Dot-loader animation
     _dotController = AnimationController(
@@ -204,7 +205,8 @@ class _AnimatedDots extends StatelessWidget {
         final animation = Tween<double>(begin: 0.35, end: 1.0).animate(
           CurvedAnimation(
             parent: controller,
-            curve: Interval(delay, (delay + 0.5).clamp(0, 1), curve: Curves.easeInOut),
+            curve: Interval(delay, (delay + 0.5).clamp(0, 1),
+                curve: Curves.easeInOut),
           ),
         );
         return AnimatedBuilder(

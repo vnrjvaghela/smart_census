@@ -23,7 +23,8 @@ class _Step1HouseholdState extends State<Step1Household> {
     if (widget.existingSurvey != null) {
       _householdId = widget.existingSurvey!.householdId;
       _addressController.text = widget.existingSurvey!.address;
-      _gpsLocation = '${widget.existingSurvey!.latitude}, ${widget.existingSurvey!.longitude}';
+      _gpsLocation =
+          '${widget.existingSurvey!.latitude}, ${widget.existingSurvey!.longitude}';
     } else {
       _generateHouseholdId();
     }
@@ -32,7 +33,8 @@ class _Step1HouseholdState extends State<Step1Household> {
   void _generateHouseholdId() {
     // Logic to auto-generate ID: DISTRICT-WARD-TIMESTAMP
     // For MVP, using a simple timestamp based ID
-    final timestamp = DateTime.now().millisecondsSinceEpoch.toString().substring(8);
+    final timestamp =
+        DateTime.now().millisecondsSinceEpoch.toString().substring(8);
     setState(() {
       _householdId = 'DL-Ward05-$timestamp';
     });
@@ -40,7 +42,7 @@ class _Step1HouseholdState extends State<Step1Household> {
 
   Future<void> _captureLocation() async {
     setState(() => _gettingLocation = true);
-    
+
     // Simulate GPS capture for now as we might be on emulator/without permissions setup fully
     await Future.delayed(const Duration(seconds: 1));
 
@@ -79,17 +81,17 @@ class _Step1HouseholdState extends State<Step1Household> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Proceeding to Step 2...')),
       );
-      
+
       Navigator.push(
-        context, 
-        MaterialPageRoute(builder: (_) => Step2Members(
-          householdId: _householdId, 
-          address: _addressController.text,
-          gpsLocation: _gpsLocation!,
-          existingMembers: widget.existingSurvey?.members ?? [],
-          existingSurvey: widget.existingSurvey,
-        ))
-      );
+          context,
+          MaterialPageRoute(
+              builder: (_) => Step2Members(
+                    householdId: _householdId,
+                    address: _addressController.text,
+                    gpsLocation: _gpsLocation!,
+                    existingMembers: widget.existingSurvey?.members ?? [],
+                    existingSurvey: widget.existingSurvey,
+                  )));
     }
   }
 
@@ -127,8 +129,12 @@ class _Step1HouseholdState extends State<Step1Household> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text("Household ID (Auto-generated)", style: TextStyle(fontSize: 12, color: Colors.grey)),
-                            Text(_householdId, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                            const Text("Household ID (Auto-generated)",
+                                style: TextStyle(
+                                    fontSize: 12, color: Colors.grey)),
+                            Text(_householdId,
+                                style: const TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold)),
                           ],
                         ),
                       ),
@@ -158,7 +164,8 @@ class _Step1HouseholdState extends State<Step1Household> {
               const SizedBox(height: 24),
 
               // GPS Location
-              const Text("Location", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              const Text("Location",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               Container(
                 decoration: BoxDecoration(
@@ -166,28 +173,33 @@ class _Step1HouseholdState extends State<Step1Household> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: ListTile(
-                  leading: Icon(
-                    Icons.location_on, 
-                    color: _gpsLocation != null ? Colors.green : Colors.grey
-                  ),
+                  leading: Icon(Icons.location_on,
+                      color: _gpsLocation != null ? Colors.green : Colors.grey),
                   title: Text(
                     _gpsLocation ?? "Location not captured",
                     style: TextStyle(
                       color: _gpsLocation != null ? Colors.black : Colors.grey,
-                      fontWeight: _gpsLocation != null ? FontWeight.bold : FontWeight.normal,
+                      fontWeight: _gpsLocation != null
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                     ),
                   ),
-                  subtitle: _gpsLocation != null ? const Text("Accuracy: High") : null,
+                  subtitle: _gpsLocation != null
+                      ? const Text("Accuracy: High")
+                      : null,
                   trailing: ElevatedButton.icon(
                     onPressed: _gettingLocation ? null : _captureLocation,
-                    icon: _gettingLocation 
-                      ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
-                      : const Icon(Icons.my_location),
+                    icon: _gettingLocation
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2))
+                        : const Icon(Icons.my_location),
                     label: const Text("Capture"),
                   ),
                 ),
               ),
-              
+
               const SizedBox(height: 48),
 
               // Next Button
