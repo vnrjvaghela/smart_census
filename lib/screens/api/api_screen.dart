@@ -26,12 +26,28 @@ class _ApiScreenState extends State<ApiScreen> {
     });
   }
 
+  String _getIndianTitle(int index) {
+    List<String> topics = [
+      'Maharashtra Population Data',
+      'Gujarat Demographic Update',
+      'Karnataka Economic Survey',
+      'Tamil Nadu Healthcare Stats',
+      'Uttar Pradesh Census'
+    ];
+    return '${topics[index % topics.length]} (Record #${index + 1})';
+  }
+
+  String _getIndianBody(int id) {
+    return 'Preliminary smart census reports indicate shifting demographics for this region. '
+        'District verifications underway for ${1000 + id * 15} pending households.';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'API Data Loading',
+          'National Census Database',
           style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
         ),
         actions: [
@@ -86,11 +102,11 @@ class _ApiScreenState extends State<ApiScreen> {
                 margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
                 child: ListTile(
                   title: Text(
-                    post.title,
+                    _getIndianTitle(index),
                     style: GoogleFonts.poppins(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                    post.body,
+                    _getIndianBody(post.id),
                     style: GoogleFonts.poppins(),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,

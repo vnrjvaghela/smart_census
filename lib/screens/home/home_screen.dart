@@ -10,9 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:smart_census/screens/survey/survey_detail_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:async';
-import 'package:smart_census/screens/ai/ocr_screen.dart';
-import 'package:smart_census/screens/api/api_screen.dart';
-import 'package:smart_census/screens/notifications/notification_screen.dart';
+import 'package:smart_census/screens/home/lab_features_screen.dart';
 
 // The new "Home Screen" acts as a shell for the Bottom Navigation Bar.
 class HomeScreen extends StatefulWidget {
@@ -44,7 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final isDark = theme.brightness == Brightness.dark;
 
     return Scaffold(
-      drawer: _buildDrawer(context),
       body: _tabs[_currentIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -96,54 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildDrawer(BuildContext context) {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration:
-                BoxDecoration(color: Theme.of(context).colorScheme.primary),
-            child: Text('Lab Features',
-                style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold)),
-          ),
-          ListTile(
-            leading: const Icon(Icons.camera_alt),
-            title: Text('LAB 11 - OCR', style: GoogleFonts.inter()),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const OcrScreen()));
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.api),
-            title: Text('LAB 9 - API', style: GoogleFonts.inter()),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const ApiScreen()));
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.notifications),
-            title: Text('LAB 10 - Notifications', style: GoogleFonts.inter()),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const NotificationScreen()));
-            },
-          ),
-        ],
       ),
     );
   }
@@ -249,11 +198,93 @@ class _DashboardTabState extends State<DashboardTab> {
         title: const Text('Dashboard'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.science),
+            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const LabFeaturesScreen())),
+            tooltip: 'Lab Features',
+          ),
+          IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: _isSyncing ? null : _loadStats,
             tooltip: 'Refresh Stats',
           ),
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  const Icon(Icons.menu_book, size: 32, color: Colors.white),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Smart Census',
+                    style: GoogleFonts.inter(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.grid_view_rounded),
+              title: const Text('Dashboard'),
+              onTap: () => Navigator.pop(context),
+            ),
+            ListTile(
+              leading: const Icon(Icons.assignment_outlined),
+              title: const Text('Surveys'),
+              onTap: () {
+                Navigator.pop(context);
+                // Navigate to surveys tab
+                final homeState = context.findAncestorStateOfType<_HomeScreenState>();
+                homeState?.setState(() => homeState._currentIndex = 1);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person_outline_rounded),
+              title: const Text('Profile'),
+              onTap: () {
+                Navigator.pop(context);
+                // Navigate to profile tab
+                final homeState = context.findAncestorStateOfType<_HomeScreenState>();
+                homeState?.setState(() => homeState._currentIndex = 2);
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.science),
+              title: const Text('Lab Features'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LabFeaturesScreen()),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: const Text('About'),
+              onTap: () {
+                Navigator.pop(context);
+                showAboutDialog(
+                  context: context,
+                  applicationName: 'Smart Census',
+                  applicationVersion: '1.0.0',
+                );
+              },
+            ),
+          ],
+        ),
       ),
       body: Column(
         children: [

@@ -19,7 +19,6 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _logoOpacity;
   late Animation<double> _logoGlow;
   late Animation<double> _textOpacity;
-  late Animation<Offset> _textSlide;
 
   @override
   void initState() {
@@ -49,9 +48,6 @@ class _SplashScreenState extends State<SplashScreen>
     _textOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _textController, curve: Curves.easeOut),
     );
-    _textSlide = Tween<Offset>(begin: const Offset(0, 0.35), end: Offset.zero)
-        .animate(
-            CurvedAnimation(parent: _textController, curve: Curves.easeOut));
 
     // Dot-loader animation
     _dotController = AnimationController(
@@ -139,39 +135,6 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                     );
                   },
-                ),
-
-                const SizedBox(height: 36),
-
-                // ── App Name + Tagline ──
-                SlideTransition(
-                  position: _textSlide,
-                  child: FadeTransition(
-                    opacity: _textOpacity,
-                    child: Column(
-                      children: [
-                        Text(
-                          'Smart Census',
-                          style: GoogleFonts.inter(
-                            fontSize: 34,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Offline-first · AI-verified · Secure',
-                          style: GoogleFonts.inter(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white.withOpacity(0.6),
-                            letterSpacing: 0.3,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
 
                 const SizedBox(height: 64),
