@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:smart_census/models/survey_model.dart';
-import 'package:smart_census/models/user_model.dart'; // Placeholder if needed used later
 import 'package:smart_census/screens/survey/family_members_screen.dart';
 import 'package:smart_census/services/database_service.dart';
 
@@ -179,6 +178,8 @@ class _Step1HouseholdState extends State<Step1Household> {
       status: 'Draft',
     );
     await DatabaseService().saveDraft(draft);
+
+    if (!mounted) return;
 
     Navigator.push(
       context,

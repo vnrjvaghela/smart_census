@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_census/models/family_member_model.dart';
 import 'package:smart_census/models/survey_model.dart';
-import 'package:smart_census/screens/survey/step3_documents.dart';
+import 'package:smart_census/screens/survey/document_submission_screen.dart';
 
 class Step2Members extends StatefulWidget {
   final String householdId;
@@ -64,7 +64,7 @@ class _Step2MembersState extends State<Step2Members> {
                     validator: (v) => v!.isEmpty ? 'Required' : null,
                   ),
                   DropdownButtonFormField<String>(
-                    initialValue: gender,
+                    value: gender,
                     decoration: const InputDecoration(labelText: 'Gender'),
                     items: ['Male', 'Female', 'Other']
                         .map((e) => DropdownMenuItem(value: e, child: Text(e)))
@@ -72,7 +72,7 @@ class _Step2MembersState extends State<Step2Members> {
                     onChanged: (v) => gender = v!,
                   ),
                   DropdownButtonFormField<String>(
-                    initialValue: relation,
+                    value: relation,
                     decoration:
                         const InputDecoration(labelText: 'Relation to Head'),
                     items: ['Head', 'Spouse', 'Child', 'Parent', 'Other']
@@ -108,6 +108,7 @@ class _Step2MembersState extends State<Step2Members> {
                     relation: relation,
                     education: educationController.text,
                     occupation: occupationController.text,
+                    caste: '',
                   );
                   setState(() => _members.add(newMember));
                   Navigator.pop(context);

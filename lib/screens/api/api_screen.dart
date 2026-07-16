@@ -4,10 +4,10 @@ import '../../models/post_model.dart';
 import '../../services/api_service.dart';
 
 class ApiScreen extends StatefulWidget {
-  const ApiScreen({Key? key}) : super(key: key);
+  const ApiScreen({super.key});
 
   @override
-  _ApiScreenState createState() => _ApiScreenState();
+  State<ApiScreen> createState() => _ApiScreenState();
 }
 
 class _ApiScreenState extends State<ApiScreen> {

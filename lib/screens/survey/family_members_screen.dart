@@ -389,10 +389,12 @@ class _AddMemberFormStatefulState extends State<_AddMemberFormStateful> {
         TextEditingController(text: widget.existingMember?.occupation ?? '');
 
     if (widget.existingMember != null) {
-      if (_genders.contains(widget.existingMember!.gender))
+      if (_genders.contains(widget.existingMember!.gender)) {
         _gender = widget.existingMember!.gender;
-      if (_relations.contains(widget.existingMember!.relation))
+      }
+      if (_relations.contains(widget.existingMember!.relation)) {
         _relation = widget.existingMember!.relation;
+      }
     }
   }
 

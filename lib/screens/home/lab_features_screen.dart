@@ -5,7 +5,7 @@ import 'package:smart_census/screens/api/api_screen.dart';
 import 'package:smart_census/screens/notifications/notification_screen.dart';
 
 class LabFeaturesScreen extends StatelessWidget {
-  const LabFeaturesScreen({Key? key}) : super(key: key);
+  const LabFeaturesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

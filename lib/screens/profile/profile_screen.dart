@@ -96,6 +96,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _signOut(BuildContext context) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('user_role');
     await AuthService().signOut();
     if (!context.mounted) return;
     Navigator.of(context).pushAndRemoveUntil(

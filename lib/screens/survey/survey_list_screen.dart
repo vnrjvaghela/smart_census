@@ -59,10 +59,12 @@ class _SurveyListScreenState extends State<SurveyListScreen> {
             survey.address.toLowerCase().contains(_searchQuery.toLowerCase());
 
         if (_filterStatus == 'All') return matchesSearch;
-        if (_filterStatus == 'Pending')
+        if (_filterStatus == 'Pending') {
           return matchesSearch && !survey.isSynced;
-        if (_filterStatus == 'Uploaded')
+        }
+        if (_filterStatus == 'Uploaded') {
           return matchesSearch && survey.isSynced;
+        }
         return false;
       }).toList();
     });
@@ -117,6 +119,7 @@ class _SurveyListScreenState extends State<SurveyListScreen> {
     try {
       await DatabaseService().deleteSurvey(surveyId);
       await _loadSurveys();
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Survey deleted successfully')),
       );
@@ -143,8 +146,8 @@ class _SurveyListScreenState extends State<SurveyListScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToAddSurvey,
-        child: const Icon(Icons.add),
         tooltip: 'Add Survey',
+        child: const Icon(Icons.add),
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())

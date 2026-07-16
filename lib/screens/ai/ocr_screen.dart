@@ -7,10 +7,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OcrScreen extends StatefulWidget {
-  const OcrScreen({Key? key}) : super(key: key);
+  const OcrScreen({super.key});
 
   @override
-  _OcrScreenState createState() => _OcrScreenState();
+  State<OcrScreen> createState() => _OcrScreenState();
 }
 
 class _OcrScreenState extends State<OcrScreen> {
@@ -24,9 +24,11 @@ class _OcrScreenState extends State<OcrScreen> {
     // Permission handling (Storage/Camera) based on Android version
     var status = await Permission.camera.request();
     if (status.isDenied) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Camera permission required.')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Camera permission required.')),
+        );
+      }
       return;
     }
 
@@ -59,7 +61,7 @@ class _OcrScreenState extends State<OcrScreen> {
   }
 
   Future<void> _uploadToStorage(File file) async {
-    final fileName = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+    final fileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
     final ref =
         FirebaseStorage.instance.ref().child('ocr_images').child(fileName);
     await ref.putFile(file);

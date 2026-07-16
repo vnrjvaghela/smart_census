@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:smart_census/models/survey_model.dart';
 import 'package:smart_census/services/database_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // dart:io is only available on mobile/desktop, not on the web.
 // Firebase Storage image upload is conditionally compiled using kIsWeb.
@@ -42,14 +43,21 @@ class SyncService {
       }
     }
 
-    // 2. Prepare data map for Firestore
+    // 2. Get surveyor info from SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    final surveyorPhone = prefs.getString('user_phone') ?? 'unknown';
+    final surveyorName = prefs.getString('surveyor_name') ?? 'Surveyor';
+
+    // 3. Prepare data map for Firestore
     final data = survey.toJson();
     data['documentUrls'] = cloudImageUrls;
+    data['surveyorPhone'] = surveyorPhone;
+    data['surveyorName'] = surveyorName;
 
-    // 3. Write to Firestore
+    // 4. Write to Firestore
     await _firestore.collection('surveys').doc(survey.id).set(data);
 
-    // 4. Update local record with synced status
+    // 5. Update local record with synced status
     final updatedSurvey = SurveyModel(
       id: survey.id,
       householdId: survey.householdId,

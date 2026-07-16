@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_census/screens/auth/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_census/screens/home/home_screen.dart';
+import 'package:smart_census/screens/admin/admin_dashboard_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,19 +14,16 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
   late AnimationController _logoController;
-  late AnimationController _textController;
   late AnimationController _dotController;
 
   late Animation<double> _logoScale;
   late Animation<double> _logoOpacity;
   late Animation<double> _logoGlow;
-  late Animation<double> _textOpacity;
 
   @override
   void initState() {
     super.initState();
 
-    // Logo animation: scale + fade in
     _logoController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 900),
@@ -40,45 +39,47 @@ class _SplashScreenState extends State<SplashScreen>
       CurvedAnimation(parent: _logoController, curve: const Interval(0.4, 1.0)),
     );
 
-    // Text animation: fade + slide up
-    _textController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
-    );
-    _textOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _textController, curve: Curves.easeOut),
-    );
-
-    // Dot-loader animation
     _dotController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
     )..repeat(reverse: true);
 
-    // Sequence: logo → text → navigate
-    _logoController.forward().then((_) {
-      if (mounted) _textController.forward();
-    });
+    _logoController.forward();
 
     Future.delayed(const Duration(milliseconds: 2600), () {
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          PageRouteBuilder(
-            pageBuilder: (c, a, b) => const LoginScreen(),
-            transitionsBuilder: (c, anim, b, child) =>
-                FadeTransition(opacity: anim, child: child),
-            transitionDuration: const Duration(milliseconds: 500),
-          ),
-        );
-      }
+      if (mounted) _navigateBasedOnRole();
     });
+  }
+
+  Future<void> _navigateBasedOnRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    final role = prefs.getString('user_role');
+
+    Widget destination;
+    if (role == 'admin') {
+      destination = const AdminDashboardScreen();
+    } else if (role == 'surveyor') {
+      destination = const HomeScreen();
+    } else {
+      destination = const LoginScreen();
+    }
+
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        PageRouteBuilder(
+          pageBuilder: (c, a, b) => destination,
+          transitionsBuilder: (c, anim, b, child) =>
+              FadeTransition(opacity: anim, child: child),
+          transitionDuration: const Duration(milliseconds: 500),
+        ),
+      );
+    }
   }
 
   @override
   void dispose() {
     _logoController.dispose();
-    _textController.dispose();
     _dotController.dispose();
     super.dispose();
   }
@@ -99,7 +100,7 @@ class _SplashScreenState extends State<SplashScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // ── Glowing Logo ──
+                // Glowing Logo
                 AnimatedBuilder(
                   animation: _logoController,
                   builder: (context, child) {
@@ -139,11 +140,8 @@ class _SplashScreenState extends State<SplashScreen>
 
                 const SizedBox(height: 64),
 
-                // ── Animated Dot Loader ──
-                FadeTransition(
-                  opacity: _textOpacity,
-                  child: _AnimatedDots(controller: _dotController),
-                ),
+                // Animated Dot Loader
+                _AnimatedDots(controller: _dotController),
               ],
             ),
           ),
